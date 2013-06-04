@@ -154,6 +154,11 @@ dir /var/vcap/store/redis
 
 ################################# REPLICATION #################################
 
+<% unless spec['index'] == 0 %>
+slaveof <%= p('redis.master') %> <%= p('redis.port') %>
+masterauth <%= p('redis.password') %>
+<% end %>
+
 # Master-Slave replication. Use slaveof to make a Redis instance a copy of
 # another Redis server. Note that the configuration is local to the slave
 # so for example it is possible to configure the slave to save the DB with a

@@ -16,3 +16,6 @@ properties:
   redis.password:
     description: Password to access redis server
     default: "r3d!s"
+  redis.master:
+    description: IP address or hostname of the Redis master node
+    default: false

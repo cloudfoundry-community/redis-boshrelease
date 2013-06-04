@@ -23,6 +23,8 @@ bosh deployment examples/aws.yml
 bosh deploy
 ```
 
+If you deploy more than one instance in a job it assumes that you want replication, and you need to specify the IP address of the master node in your deployment manifest.
+
 ## Development
 
 
