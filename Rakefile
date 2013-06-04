@@ -1,3 +1,6 @@
+require 'rspec'
+require 'rspec/core/rake_task'
+
 desc 'Generates a properties file for each job based on properties.X.Y used in templates'
 task :job_properties do
   require 'fileutils'
@@ -15,11 +18,7 @@ task :job_properties do
 end
 
 desc 'run tests'
-task :spec do
-  unless File.exists?('config/dev.yml')
-    File.open('config/dev.yml', 'w') do |f|
-      f.puts("---\ndev_name: redis\n")
-    end
-  end
-  sh 'bosh create release --force'
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = 'spec/release/*_spec.rb'
+  t.rspec_opts = %w(--format documentation --color)
 end
