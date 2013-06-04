@@ -2,9 +2,9 @@
 
 One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is too deploy this bosh release.
 
-## Release to your BOSH
+## Usage
 
-To upload this release to your BOSH:
+To use this bosh release, first upload it to your bosh:
 
 ```
 bosh target BOSH_URL
@@ -12,6 +12,15 @@ bosh login
 git clone git@github.com:drnic/redis-boshrelease.git
 cd redis-boshrelease
 bosh upload release releases/redis-1.yml
+```
+
+Now edit the `examples/aws.yml` or `examples/openstack*.yml` with your bosh' UUID (run `bosh status` to get it).
+
+Finally, target and deploy. For deployment to a bosh running on aws:
+
+```
+bosh deployment examples/aws.yml
+bosh deploy
 ```
 
 ## Development
