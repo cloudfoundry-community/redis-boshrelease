@@ -1,0 +1,54 @@
+---
+deployment: redis-solo
+release:
+  name: redis
+  version: '1'
+job:
+  name: redis
+  release: redis
+  templates:
+  - name: redis
+    version: '1'
+    sha1: 2df760cb4dbb87ac14a0bdc0c0a5599765eb3562
+    blobstore_id: 59f2df4e-d074-4361-a423-e20827566955
+  template: redis
+  version: '1'
+  sha1: 2df760cb4dbb87ac14a0bdc0c0a5599765eb3562
+  blobstore_id: 59f2df4e-d074-4361-a423-e20827566955
+index: 0
+networks:
+  default:
+    type: dynamic
+    cloud_properties:
+      security_groups:
+      - default
+    dns:
+    - 10.0.0.2
+    - 10.0.0.1
+    default:
+    - dns
+    - gateway
+    ip: 10.0.0.3
+    netmask: 255.255.255.0
+    gateway: 10.0.0.1
+resource_pool:
+  name: common
+  cloud_properties:
+    instance_type: m1.microbosh
+  stemcell:
+    name: bosh-stemcell
+    version: '693'
+packages:
+  redis:
+    name: redis
+    version: '1.1'
+    sha1: f067136887d2c36bbb7956e336ed2d7274e595dc
+    blobstore_id: 13db6a1a-c262-4cc1-b765-b401b47cd366
+persistent_disk: 0
+configuration_hash: 9faf8fefb95ca77e274130d54decf3c54063b2fa
+properties:
+  redis:
+    port: 6379
+    password: r3d!s
+template_hashes:
+  redis: 1611520ec07e62f36ca4e40a9283cb442504cabd
