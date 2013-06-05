@@ -1,6 +1,6 @@
 # Example apply_spec.yml
 
-This folder contains example specs for a bosh agent `apply` message.
+This folder contains example specs for a bosh agent `apply` message. You could apply this to a blank bosh VM, for example one created using [bosh_agent chef cookbook](https://github.com/cloudfoundry-community/chef-bosh_agent).
 
 The blobstore references match to an example deployment of the release and may not match to your deployment.
 
