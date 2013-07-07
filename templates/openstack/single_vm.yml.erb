@@ -16,12 +16,12 @@
 #
 # Then apply this template:
 #
-#     $ bosh diff templates/openstack-vip/single_vm.yml.erb
+#     $ bosh diff templates/openstack/single_vm.yml.erb
 #
-redis_instance_type = find("properties.redis.instance_type")
 redis_sg = find("properties.redis.security_group")
 redis_port = 6379
 redis_password = random_string 12, :redis
+redis_resource = find("properties.redis.resource")
 puts "export REDIS_URL=redis://:#{redis_password}@HOST:#{redis_port}/0"
 -%>
 name: <%= find("name") %>
@@ -36,7 +36,7 @@ compilation:
   network: default
   reuse_compilation_vms: true
   cloud_properties:
-    instance_type: <%= redis_instance_type %>
+    instance_type: m1.small
 
 update:
   canaries: 1
@@ -53,20 +53,47 @@ networks:
     - <%= redis_sg %>
 
 resource_pools:
-- name: common
+- name: small
   network: default
-  size: 1
+  size: <%= redis_resource == "small" ? 1 : 0 %>
   stemcell:
     name: bosh-stemcell
     version: latest
   cloud_properties:
-    instance_type: <%= redis_instance_type %>
+    instance_type: m1.small
+
+- name: medium
+  network: default
+  size: <%= redis_resource == "medium" ? 1 : 0 %>
+  stemcell:
+    name: bosh-stemcell
+    version: latest
+  cloud_properties:
+    instance_type: m1.medium
+
+- name: large
+  network: default
+  size: <%= redis_resource == "large" ? 1 : 0 %>
+  stemcell:
+    name: bosh-stemcell
+    version: latest
+  cloud_properties:
+    instance_type: m1.large
+
+- name: xlarge
+  network: default
+  size: <%= redis_resource == "xlarge" ? 1 : 0 %>
+  stemcell:
+    name: bosh-stemcell
+    version: latest
+  cloud_properties:
+    instance_type: m1.xlarge
 
 jobs:
 - name: redis
   template: redis
   instances: 1
-  resource_pool: common
+  resource_pool: <%= redis_resource %>
   networks:
   - name: default
     default:
@@ -75,5 +102,7 @@ jobs:
 
 properties:
   redis:
+    resource: <%= redis_resource %>
+    security_group: <%= redis_sg %>
     port: <%= redis_port %>
     password: <%= redis_password %>

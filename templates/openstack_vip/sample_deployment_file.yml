@@ -1,8 +1,0 @@
----
-name: NAME
-director_uuid: UUID
-networks: {}
-properties:
-  redis:
-    instance_type: m1.medium
-    security_group: redis-server
