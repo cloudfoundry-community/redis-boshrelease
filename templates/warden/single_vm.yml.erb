@@ -18,11 +18,8 @@
 #
 #     $ bosh diff templates/aws/single_vm.yml.erb
 #
-redis_sg = find("properties.redis.security_group")
 redis_port = 6379
 redis_password = random_string 12, :redis
-redis_resource = find("properties.redis.resource")
-redis_persistent_disk = find("properties.redis.persistent_disk")
 -%>
 name: <%= find("name") %>
 director_uuid: <%= find("director_uuid") %>
@@ -46,39 +43,37 @@ networks:
 
 - name: compile
   subnets:
-<% (0..63).each_with_index.map do |i| %>
-  - range: 10.244.0.<%= i*4 %>/30
+<%% (0..63).each_with_index.map do |i| %>
+  - range: 10.244.0.<%%= i*4 %>/30
     reserved:
-      - 10.244.0.<%= i*4 + 1 %>
-    # static:
-    #   - 10.244.0.<%= i*4 + 2 %>
+      - 10.244.0.<%%= i*4 + 1 %>
     cloud_properties:
       name: random
-<% end %>
+<%% end %>
 - name: default
   subnets:
-<% (0..63).each_with_index.map do |i| %>
-  - range: 10.244.1.<%= i*4 %>/30
+<%% (0..63).each_with_index.map do |i| %>
+  - range: 10.244.1.<%%= i*4 %>/30
     reserved:
-      - 10.244.1.<%= i*4 + 1 %>
+      - 10.244.1.<%%= i*4 + 1 %>
     static:
-      - 10.244.1.<%= i*4 + 2 %>
+      - 10.244.1.<%%= i*4 + 2 %>
     cloud_properties:
       name: random
-<% end
+<%% end
 (0..63).each_with_index.map do |i| %>
-  - range: 10.244.2.<%= i*4 %>/30
+  - range: 10.244.2.<%%= i*4 %>/30
     reserved:
-      - 10.244.2.<%= i*4 + 1 %>
+      - 10.244.2.<%%= i*4 + 1 %>
     cloud_properties:
       name: random
-<% end %>
+<%% end %>
 
 resource_pools:
 
 - name: infrastructure
   network: default
-  size: 4
+  size: 1
   stemcell:
     name: bosh-stemcell
     version: latest
@@ -89,7 +84,7 @@ jobs:
 - name: redis
   template: redis
   instances: 1
-  resource_pool: <%= redis_resource %>
+  resource_pool: infrastructure
   networks:
   - name: default
     static_ips:
