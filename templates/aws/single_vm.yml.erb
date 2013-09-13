@@ -22,6 +22,7 @@ redis_sg = find("properties.redis.security_group")
 redis_port = 6379
 redis_password = random_string 12, :redis
 redis_resource = find("properties.redis.resource")
+redis_persistent_disk = find("properties.redis.persistent_disk")
 -%>
 name: <%= find("name") %>
 director_uuid: <%= find("director_uuid") %>
@@ -98,10 +99,12 @@ jobs:
     default:
     - dns
     - gateway
+  persistent_disk: <%= redis_persistent_disk %>
 
 properties:
   redis:
     resource: <%= redis_resource %>
     security_group: <%= redis_sg %>
+    persistent_disk: <%= redis_persistent_disk %>
     port: <%= redis_port %>
     password: <%= redis_password %>

@@ -10,4 +10,5 @@ properties:
   description: Resource/flavor of instance to use
 - name: redis.security_group
   description: Security group for instance(s). Must have TCP ports 22 & 6379 open.
-  default: default
+- name: redis.persistent_disk
+  description: Size of persistent disk for servers
