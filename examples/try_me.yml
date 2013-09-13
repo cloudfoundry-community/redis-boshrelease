@@ -14,6 +14,11 @@
 #     $ bosh diff templates/openstack/single_vm.yml.erb
 #     $ bosh diff templates/warden/single_vm.yml.erb
 #
+# Then deploy:
+#
+#     $ bosh deploy
+#
+# For Warden, to access the VMs, first "vagrant ssh".
 ---
 name: redis
 director_uuid: CHANGEME
