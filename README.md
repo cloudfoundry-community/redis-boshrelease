@@ -14,16 +14,48 @@ cd redis-boshrelease
 bosh upload release releases/redis-1.yml
 ```
 
-Now edit the `examples/aws.yml` or `examples/openstack*.yml` with your bosh' UUID (run `bosh status` to get it).
-
-Finally, target and deploy. For deployment to a bosh running on aws:
+Now create a deployment file and deploy:
 
 ```
-bosh deployment examples/aws.yml
+bosh deployment path/to/deployment.yml
 bosh deploy
 ```
 
 If you deploy more than one instance in a job it assumes that you want replication, and you need to specify the IP address of the master node in your deployment manifest.
+
+### Create deployment file from templates
+
+There are helpful base templates for AWS, OpenStack, and Warden (bosh-lite) CPIs.
+
+See the `examples/try_me.yml` file for complete inline documentation.
+
+For example, to deploy to bosh-lite (warden), modify `examples/try_me.yml` to look like:
+
+```
+---
+name: redis
+director_uuid: CHANGEME
+networks: {}
+properties:
+  redis: {}
+```
+
+The `properties.redis` examples in `try_me.yml` aren't required for Warden.
+
+Now:
+
+```
+bosh deployment examples/try_me.yml
+bosh diff templates/warden/single_vm.yml.erb
+bosh deploy
+```
+
+To access the running Redis server, that is now running within a warden container within Vagrant, you must ssh into Vagrant:
+
+```
+vagrant ssh
+$ redis-cli -h 10.244.1.2 -a p@ssw0rd
+```
 
 ## Development
 
