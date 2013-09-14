@@ -14,3 +14,5 @@ properties:
   redis:
     resource: medium
     security_group: redis-server
+    redis_persistent_disk: 4096
+    
