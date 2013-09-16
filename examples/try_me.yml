@@ -1,10 +1,7 @@
 # Provide your attributes below.
 #
-# Then tell git to ignore any changes:
 #
-#     $ git update-index --assume-unchanged examples/try_me.yml
-
-# Then target that deployment file:
+# Target this deployment file:
 #
 #     $ bosh deployment examples/try_me.yml
 #
