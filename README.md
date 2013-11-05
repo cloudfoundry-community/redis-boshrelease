@@ -1,6 +1,6 @@
 # Bosh release for redis [![Build Status](https://travis-ci.org/cloudfoundry-community/redis-boshrelease.png?branch=master)](https://travis-ci.org/cloudfoundry-community/redis-boshrelease/)
 
-One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is too deploy this bosh release.
+One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is to deploy this bosh release.
 
 ## Usage
 
