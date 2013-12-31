@@ -13,12 +13,24 @@ cd redis-boshrelease
 bosh upload release releases/redis-1.yml
 ```
 
-For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest:
+For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a 3 VM cluster:
 
 ```
-cp examples/bosh-lite-cluster.yml local-cluster.yml
-sed -i '' -e "s/DIRECTOR_UUID/$(bosh status | grep UUID | awk '{print $2}')/" local-cluster.yml
-bosh deployment local-cluster.yml
+templates/make_manifest warden
+bosh -n deploy
+```
+
+For Openstack (Nova Networks), create a three-node cluster:
+
+```
+templates/make_manifest openstack-nova
+bosh -n deploy
+```
+
+For AWS EC2, create a three-node clusterg:
+
+```
+templates/make_manifest aws-ec2
 bosh -n deploy
 ```
 

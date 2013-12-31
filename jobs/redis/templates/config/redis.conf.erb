@@ -159,9 +159,8 @@ dir ./
 # so for example it is possible to configure the slave to save the DB with a
 # different interval, or to listen to another port, and so on.
 #
-# slaveof <masterip> <masterport>
-<% if index != 0 %>
-slaveof <%= p("redis.master") %> <%= p("redis.port") %>
+<% if_p("redis.master", "redis.port") do |master, port| %>
+slaveof <%= "master" %> <%= "port" %>
 <% end %>
 
 # If the master is password protected (using the "requirepass" configuration
