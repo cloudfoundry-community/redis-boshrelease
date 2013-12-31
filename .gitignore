@@ -15,3 +15,4 @@ blobs/*
 *#
 #*
 Gemfile.lock
+local*yml

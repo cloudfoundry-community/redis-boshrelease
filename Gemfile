@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-source 'http://s3.amazonaws.com/bosh-jenkins-gems/'
 
 group :test do
   gem 'rake'

@@ -7,57 +7,20 @@ One of the fastest ways to get [redis](http://redis.io) running on any infrastru
 To use this bosh release, first upload it to your bosh:
 
 ```
-bosh target BOSH_URL
-bosh login
+bosh target BOSH_HOST
 git clone git@github.com:cloudfoundry-community/redis-boshrelease.git
 cd redis-boshrelease
 bosh upload release releases/redis-1.yml
 ```
 
-Now create a deployment file and deploy:
+For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest:
 
 ```
-bosh deployment path/to/deployment.yml
-bosh deploy
+cp examples/bosh-lite-cluster.yml local-cluster.yml
+sed -i '' -e "s/DIRECTOR_UUID/$(bosh status | grep UUID | awk '{print $2}')/" local-cluster.yml
+bosh deployment local-cluster.yml
+bosh -n deploy
 ```
-
-If you deploy more than one instance in a job it assumes that you want replication, and you need to specify the IP address of the master node in your deployment manifest.
-
-### Create deployment file from templates
-
-There are helpful base templates for AWS, OpenStack, and Warden (bosh-lite) CPIs.
-
-See the `examples/try_me.yml` file for complete inline documentation.
-
-For example, to deploy to bosh-lite (warden), modify `examples/try_me.yml` to look like:
-
-```
----
-name: redis
-director_uuid: CHANGEME
-networks: {}
-properties:
-  redis: {}
-```
-
-The `properties.redis` examples in `try_me.yml` aren't required for Warden.
-
-Now:
-
-```
-bosh deployment examples/try_me.yml
-bosh diff templates/warden/single_vm.yml.erb
-bosh deploy
-```
-
-To access the running Redis server, that is now running within a warden container within Vagrant, you must ssh into Vagrant:
-
-```
-vagrant ssh
-$ redis-cli -h 10.244.1.2 -a p@ssw0rd
-```
-
-## Development
 
 
 ## Create new final release
