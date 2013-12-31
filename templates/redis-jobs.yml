@@ -1,0 +1,25 @@
+networks: (( merge ))
+
+meta:
+  environment: ~
+
+jobs:
+  - name: redis_leader_z1
+    template: redis
+    instances: 0
+    resource_pool: small_z1
+    networks:
+      - name: redis1
+        static_ips: ~
+  - name: redis_z1
+    template: redis
+    instances: 0
+    resource_pool: small_z1
+    networks:
+      - name: redis1
+        static_ips: ~
+    update:
+      canaries: 10
+    properties:
+      redis:
+        master: (( merge ))
