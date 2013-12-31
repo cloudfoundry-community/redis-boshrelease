@@ -1,6 +1,6 @@
 ---
-redis/redis-2.6.13.tar.gz:
-  object_id: 2746b4e5-b5f5-405f-bc65-a1afc627cce1
+redis/redis-2.8.3.tar.gz:
+  object_id: 356f4b32-50a7-45b4-804e-099b3a84ea0e
   sha: !binary |-
-    MmVmOGVhNmE2NzQ2NWI2YzVhNWVhNDkyNDEzMTNkM2RiYzBkZTExYg==
-  size: 994331
+    YTc1MTM3MWVlZWQ1ZjVmMDI5NjVlYjM0ZDk4OWMxOTYzZGQ4ZDhjNw==
+  size: 1046106
