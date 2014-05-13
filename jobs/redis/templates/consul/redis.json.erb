@@ -6,6 +6,12 @@
         <% end.else do %>
         "tags": ["master"],
         <% end %>
-        "port": <%= p("redis.port") %>
+        "port": <%= p("redis.port") %>,
+        "check": {
+          "id": "redis-set",
+          "name": "Redis set",
+          "script": "redis-cli set consul-test \"$(date)\"",
+          "interval": "5s"
+        }
     }
 }
