@@ -5,14 +5,30 @@ set -e
 infrastructure=$1
 template_prefix="redis"
 
+shift
+
 if [ "$infrastructure" != "aws-ec2" ] && \
     [ "$infrastructure" != "openstack-nova" ] && \
     [ "$infrastructure" != "warden" ] ; then
-  echo "usage: ./make_manifest <warden|aws-ec2|openstack-nova>"
+  echo "usage: ./make_manifest <warden|aws-ec2|openstack-nova> <normal|consul>"
   exit 1
 fi
 
-shift
+if [ "$infrastructure" = "warden" ] ; then
+  advertisement=$1
+  shift
+
+  if [ "$advertisement" != "normal" ] && \
+      [ "$advertisement" != "consul" ] ; then
+    echo "usage: ./make_manifest warden <normal|consul>"
+    exit 1
+  fi
+fi
+
+advertisement=${advertisement:-normal}
+if [[ "$advertisement" = "consul" ]]; then
+  advertisement="${advertisement}-${infrastructure}"
+fi
 
 BOSH_STATUS=$(bosh status)
 DIRECTOR_UUID=$(echo "$BOSH_STATUS" | grep UUID | awk '{print $2}')
@@ -47,7 +63,7 @@ release=$templates/..
 tmpdir=$release/tmp
 
 mkdir -p $tmpdir
-cp $templates/stub.yml $tmpdir/stub-with-uuid.yml
+cp $templates/stub-${advertisement}.yml $tmpdir/stub-with-uuid.yml
 echo $DIRECTOR_NAME $DIRECTOR_CPI $DIRECTOR_UUID
 perl -pi -e "s/PLACEHOLDER-DIRECTOR-UUID/$DIRECTOR_UUID/g" $tmpdir/stub-with-uuid.yml
 perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml

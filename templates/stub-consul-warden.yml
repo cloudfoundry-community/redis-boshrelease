@@ -1,0 +1,22 @@
+---
+meta:
+  environment: NAME
+  security_groups:
+    - default
+  job_templates:
+    - name: consul
+      release: consul
+    - name: redis
+      release: redis
+director_uuid: PLACEHOLDER-DIRECTOR-UUID
+releases:
+  - name: redis
+    version: latest
+  - name: consul
+    version: latest
+properties:
+  redis: {}
+  consul:
+    servers:
+      - 10.244.4.2
+      - 10.244.4.6

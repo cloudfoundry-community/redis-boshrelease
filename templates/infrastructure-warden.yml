@@ -2,7 +2,7 @@ meta:
   environment: redis-warden
 
   stemcell:
-    name: bosh-stemcell
+    name: bosh-warden-boshlite-ubuntu
     version: latest
 
 update:
