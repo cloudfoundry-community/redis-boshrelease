@@ -47,7 +47,7 @@ There is an example available for bosh-lite.
 First, deploy the `consul-boshrelease` into bosh-lite. The redis templates for consul are pre-configured to find the consul cluster:
 
 ```
-templates/make_manifest warden normal
+templates/make_manifest warden consul
 bosh -n deploy
 ```
 
