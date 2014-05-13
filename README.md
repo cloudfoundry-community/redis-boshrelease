@@ -3,6 +3,8 @@ Bosh release for redis [![Build Status](https://travis-ci.org/cloudfoundry-commu
 
 One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is too deploy this bosh release.
 
+Supports [consul](http://consul.io) for service advertisement.
+
 Usage
 -----
 
@@ -18,7 +20,7 @@ bosh upload release releases/redis-2.yml
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a 3 VM cluster:
 
 ```
-templates/make_manifest warden
+templates/make_manifest warden normal
 bosh -n deploy
 ```
 
@@ -34,6 +36,46 @@ For AWS EC2, create a three-node clusterg:
 ```
 templates/make_manifest aws-ec2
 bosh -n deploy
+```
+
+### Consul service advertisement
+
+Co-locate the `consul` job template from the [consul-boshrelease](https://github.com/cloudfoundry-community/consul-boshrelease) and the deployment will automatically advertise each VM on [consul](http://consul.io).
+
+There is an example available for bosh-lite.
+
+First, deploy the `consul-boshrelease` into bosh-lite. The redis templates for consul are pre-configured to find the consul cluster:
+
+```
+templates/make_manifest warden normal
+bosh -n deploy
+```
+
+To confirm that redis is now discoverable on any VM connected to the consul cluster (including the 3 redis VMs deployed above), target the [consul DNS](http://www.consul.io/docs/agent/dns.html) service:
+
+```
+$ bosh ssh redis_leader_z1/0
+
+# dig @127.0.0.1 -p 8600 redis.service.consul +short
+10.244.2.14
+10.244.2.10
+10.244.2.6
+
+# dig @127.0.0.1 -p 8600 master.redis.service.consul +short
+10.244.2.6
+# dig @127.0.0.1 -p 8600 slave.redis.service.consul +short
+10.244.2.14
+10.244.2.10
+```
+
+From any machine running the consul agent you can also discover the redis cluster via the [HTTP API](http://www.consul.io/docs/agent/http.html):
+
+```
+$ curl 127.0.0.1:8500/v1/catalog/services
+{"consul":null,"redis":["master","slave"]}
+
+$ curl 127.0.0.1:8500/v1/catalog/service/redis?tag=master
+[{"Node":"redis-warden-redis_leader_z1-0","Address":"10.244.2.6","ServiceID":"redis","ServiceName":"redis","ServiceTags":["master"],"ServicePort":6379}]
 ```
 
 Create new final release
