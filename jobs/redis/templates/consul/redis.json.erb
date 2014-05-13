@@ -1,9 +1,9 @@
 {
     "service": {
         "name": "redis",
-        <% if p("redis.master") %>
+        <% if_p("redis.master") do %>
         "tags": ["slave"],
-        <% else %>
+        <% end.else do %>
         "tags": ["master"],
         <% end %>
         "port": <%= p("redis.port") %>

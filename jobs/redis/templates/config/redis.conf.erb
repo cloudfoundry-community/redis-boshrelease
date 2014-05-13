@@ -160,7 +160,7 @@ dir ./
 # different interval, or to listen to another port, and so on.
 #
 <% if_p("redis.master", "redis.port") do |master, port| %>
-slaveof <%= "master" %> <%= "port" %>
+slaveof <%= master %> <%= port %>
 <% end %>
 
 # If the master is password protected (using the "requirepass" configuration
