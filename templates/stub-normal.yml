@@ -3,6 +3,10 @@ meta:
   environment: NAME
   security_groups:
     - default
+  job_templates:
+    - name: redis
+      release: redis
+
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 releases:
   - name: redis

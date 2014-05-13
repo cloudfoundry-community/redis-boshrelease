@@ -2,17 +2,18 @@ networks: (( merge ))
 
 meta:
   environment: ~
+  job_templates: (( merge ))
 
 jobs:
   - name: redis_leader_z1
-    template: redis
+    templates: (( meta.job_templates ))
     instances: 0
     resource_pool: small_z1
     networks:
       - name: redis1
         static_ips: ~
   - name: redis_z1
-    template: redis
+    templates: (( meta.job_templates ))
     instances: 0
     resource_pool: small_z1
     networks:
