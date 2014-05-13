@@ -14,7 +14,7 @@ To use this bosh release, first upload it to your bosh:
 bosh target BOSH_HOST
 git clone https://github.com/cloudfoundry-community/redis-boshrelease.git
 cd redis-boshrelease
-bosh upload release releases/redis-3.yml
+bosh upload release releases/redis-4.yml
 ```
 
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a 3 VM cluster:
