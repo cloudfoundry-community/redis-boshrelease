@@ -1,8 +1,0 @@
-meta:
-  environment: ~
-
-jobs: (( merge ))
-
-properties:
-  networks:
-    apps: redis1

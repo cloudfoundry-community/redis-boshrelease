@@ -1,8 +1,10 @@
-# Bosh release for redis [![Build Status](https://travis-ci.org/cloudfoundry-community/redis-boshrelease.png?branch=master)](https://travis-ci.org/cloudfoundry-community/redis-boshrelease/)
+Bosh release for redis [![Build Status](https://travis-ci.org/cloudfoundry-community/redis-boshrelease.png?branch=master)](https://travis-ci.org/cloudfoundry-community/redis-boshrelease/)
+===========================================================================================================================================================================================
 
 One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is too deploy this bosh release.
 
-## Usage
+Usage
+-----
 
 To use this bosh release, first upload it to your bosh:
 
@@ -10,7 +12,7 @@ To use this bosh release, first upload it to your bosh:
 bosh target BOSH_HOST
 git clone git@github.com:cloudfoundry-community/redis-boshrelease.git
 cd redis-boshrelease
-bosh upload release releases/redis-1.yml
+bosh upload release releases/redis-2.yml
 ```
 
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a 3 VM cluster:
@@ -34,8 +36,8 @@ templates/make_manifest aws-ec2
 bosh -n deploy
 ```
 
-
-## Create new final release
+Create new final release
+------------------------
 
 To create a new final release you need to get read/write API credentials to the [@cloudfoundry-community](https://github.com/cloudfoundry-community) s3 account.
 
@@ -43,7 +45,7 @@ Please email [Dr Nic Williams](mailto:&#x64;&#x72;&#x6E;&#x69;&#x63;&#x77;&#x69;
 
 Create a `config/private.yml` file with the following contents:
 
-``` yaml
+```yaml
 ---
 blobstore:
   s3:
@@ -62,4 +64,3 @@ git commit -m "creating vXYZ release"
 git tag vXYZ
 git push origin master --tags
 ```
-

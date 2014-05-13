@@ -4,14 +4,15 @@ set -e
 
 infrastructure=$1
 template_prefix="redis"
-shift
 
-if [ "$infrastructure" != "openstack-nova" ] && \
-    [ "$infrastructure" != "aws-ec2" ] && \
+if [ "$infrastructure" != "aws-ec2" ] && \
+    [ "$infrastructure" != "openstack-nova" ] && \
     [ "$infrastructure" != "warden" ] ; then
-  echo "usage: ./make_manifest <openstack-nova|warden>"
+  echo "usage: ./make_manifest <warden|aws-ec2|openstack-nova>"
   exit 1
 fi
+
+shift
 
 BOSH_STATUS=$(bosh status)
 DIRECTOR_UUID=$(echo "$BOSH_STATUS" | grep UUID | awk '{print $2}')
@@ -26,35 +27,35 @@ if [[ $DIRECTOR_NAME = "warden" ]]; then
   fi
 fi
 
-if [[ $DIRECTOR_CPI = "aws" ]]; then
-  if [[ $infrastructure = "aws-ec2" ]]; then
+if [[ $infrastructure = "aws-ec2" ]]; then
+  if [[ $DIRECTOR_CPI != "aws" ]]; then
     echo "Not targeting an AWS BOSH. Please use 'bosh target' before running this script."
     exit 1
   fi
 fi
 
-if [[ $DIRECTOR_CPI != "openstack" ]]; then
-  if [[ $infrastructure = "openstack-nova" ]]; then
+if [[ $infrastructure = "openstack-nova" ]]; then
+  if [[ $DIRECTOR_CPI != "openstack" ]]; then
     echo "Not targeting an OpenStack BOSH. Please use 'bosh target' before running this script."
     exit 1
   fi
 fi
+
 
 templates=$(dirname $0)
 release=$templates/..
 tmpdir=$release/tmp
 
 mkdir -p $tmpdir
-cp $templates/$template_prefix-stub-spiff.yml $tmpdir/stub-with-uuid.yml
+cp $templates/stub.yml $tmpdir/stub-with-uuid.yml
 echo $DIRECTOR_NAME $DIRECTOR_CPI $DIRECTOR_UUID
 perl -pi -e "s/PLACEHOLDER-DIRECTOR-UUID/$DIRECTOR_UUID/g" $tmpdir/stub-with-uuid.yml
 perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml
 
 spiff merge \
-  $templates/$template_prefix-deployment.yml \
-  $templates/$template_prefix-jobs.yml \
-  $templates/$template_prefix-properties.yml \
-  $templates/$template_prefix-infrastructure-${infrastructure}.yml \
+  $templates/deployment.yml \
+  $templates/jobs.yml \
+  $templates/infrastructure-${infrastructure}.yml \
   $tmpdir/stub-with-uuid.yml \
   $* > $tmpdir/$NAME-manifest.yml
 
