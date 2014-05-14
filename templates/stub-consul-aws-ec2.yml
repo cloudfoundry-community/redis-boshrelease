@@ -1,0 +1,24 @@
+---
+meta:
+  environment: NAME
+  security_groups:
+    - redis-server
+    - consul
+  job_templates:
+    - name: consul
+      release: consul
+    - name: redis
+      release: redis
+director_uuid: PLACEHOLDER-DIRECTOR-UUID
+releases:
+  - name: redis
+    version: latest
+  - name: consul
+    version: latest
+properties:
+  redis: {}
+  consul:
+    servers:
+      - 0.consul-bootstrap-z1.consul1.consul-aws-ec2.microbosh
+      - 0.consul-server-z1.consul1.consul-aws-ec2.microbosh
+      - 1.consul-server-z1.consul1.consul-aws-ec2.microbosh

@@ -12,6 +12,7 @@ jobs:
     networks:
       - name: redis1
         static_ips: ~
+    persistent_disk: ~
   - name: redis_z1
     templates: (( meta.job_templates ))
     instances: 0
@@ -19,6 +20,7 @@ jobs:
     networks:
       - name: redis1
         static_ips: ~
+    persistent_disk: ~
     update:
       canaries: 10
     properties:
