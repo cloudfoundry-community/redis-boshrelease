@@ -1,0 +1,9 @@
+{
+  "check": {
+    "id": "redis-disk-half",
+    "name": "Persistent disk check - 50% warning",
+    "notes": "Persistent disk 50% full",
+    "script": "/bin/bash -c \"[[ $(df | grep /var/vcap/store | awk '{ print $5 }' | sed -e 's/%//') -ge 50 ]]\" && exit 1 || exit 0",
+    "interval": "5s"
+  }
+}

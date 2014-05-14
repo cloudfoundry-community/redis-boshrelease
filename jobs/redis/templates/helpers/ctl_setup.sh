@@ -49,5 +49,3 @@ done
 export TMPDIR=$TMP_DIR
 
 PIDFILE=$RUN_DIR/$JOB_NAME.pid
-
-echo '$PATH' $PATH
