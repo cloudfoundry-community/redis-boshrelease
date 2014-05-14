@@ -1,0 +1,16 @@
+---
+packages:
+- name: redis
+  version: 2
+  sha1: 5493029376281f5e92a980d04bb44ada0b1f2557
+  fingerprint: c92fa5548ce8b823c917724ca82b9f022cd5f334
+  dependencies: []
+jobs:
+- name: redis
+  version: 5
+  fingerprint: 6e3409e50b4c2125306259615425c59bbff6d573
+  sha1: 68821a1cddd7cbc3011eba20fe69582ab960a8c3
+commit_hash: 6fb1acaa
+uncommitted_changes: true
+name: redis
+version: 5
