@@ -1,10 +1,17 @@
 Change Log
 ==========
 
-v4
+v5
 --
 
 - consul performs health checks: available on port, disk 50% warning and 98% critical
+- correctly use /var/vcap/store/redis for persistence
+- ec2 templates add a persistent disk
+
+v4
+--
+
+- consul basic health check by writing to master node
 
 v3
 --
