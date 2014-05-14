@@ -9,6 +9,9 @@ meta:
       release: consul
     - name: redis
       release: redis
+  stemcell:
+    name: STEMCELL
+
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 releases:
   - name: redis

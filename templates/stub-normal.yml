@@ -6,6 +6,8 @@ meta:
   job_templates:
     - name: redis
       release: redis
+  stemcell:
+    name: STEMCELL
 
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 releases:
