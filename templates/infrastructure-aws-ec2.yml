@@ -22,7 +22,7 @@ jobs:
         static_ips: ~
     persistent_disk: (( meta.persistent_disk ))
   - name: redis_z1
-    instances: 2
+    instances: 1
     networks:
       - name: redis1
         static_ips: ~
