@@ -1,0 +1,9 @@
+{
+  "check": {
+    "id": "redis-disk-level",
+    "name": "Persistent disk check - 98% full",
+    "notes": "Persistent disk <%= p("health.disk.critical") %>%+ critical; <%= p("health.disk.warning") %>%+ warning",
+    "script": "/var/vcap/jobs/redis/bin/health_check disk",
+    "interval": "<%= p("health.interval") %>"
+  }
+}

@@ -23,6 +23,7 @@ case $1 in
     redis-cli shutdown
 
     ;;
+
   *)
     echo "Usage: redis_ctl {start|stop}"
 

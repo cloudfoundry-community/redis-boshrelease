@@ -4,14 +4,14 @@ packages:
 - redis
 templates:
   bin/redis_ctl: bin/redis_ctl
+  bin/health_check: bin/health_check
   bin/monit_debugger: bin/monit_debugger
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/redis.conf.erb: config/redis.conf
   consul/redis.json.erb: consul/redis.json
-  consul/redis-disk-full.json: consul/redis-disk-full.json
-  consul/redis-disk-warning.json: consul/redis-disk-warning.json
+  consul/redis-disk-level.json.erb: consul/redis-disk-level.json
 properties:
   redis.port:
     description: Port to listen for requests to redis server
@@ -21,3 +21,13 @@ properties:
     default: "r3d!s"
   redis.master:
     description: IP address or hostname of the Redis master node
+
+  health.interval:
+    description: Interval for consul to perform health checks
+    default: "20s"
+  health.disk.critical:
+    description: Percentage of persistent disk full to trigger critial health alert
+    default: 98
+  health.disk.warning:
+    description: Percentage of persistent disk full to trigger warning health alert
+    default: 50

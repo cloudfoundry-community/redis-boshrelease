@@ -1,9 +1,0 @@
-{
-  "check": {
-    "id": "redis-disk-full",
-    "name": "Persistent disk check - 98% full",
-    "notes": "Persistent disk 98%+ full",
-    "script": "/bin/bash -c \"[[ $(df | grep /var/vcap/store | awk '{ print $5 }' | sed -e 's/%//') -ge 98 ]]\" && exit 2 || exit 0",
-    "interval": "5s"
-  }
-}

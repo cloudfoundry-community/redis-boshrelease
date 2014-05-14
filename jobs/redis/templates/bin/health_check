@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+export JOB_DIR=/var/vcap/jobs/redis
+
+source $JOB_DIR/data/properties.sh
+
+case $1 in
+  disk)
+    volume=/var/vcap/store
+    persistent_disk_level=$(df | grep $volume | awk '{ print $5 }' | sed -e 's/%//')
+    echo "Disk level $persistent_disk_level%"
+    if [[ $persistent_disk_level -ge $DISK_CRITICAL_LEVEL ]]; then
+      exit 2
+    fi
+    if [[ $persistent_disk_level -ge $DISK_WARNING_LEVEL ]]; then
+      exit 1
+    fi
+    exit 0
+    ;;
+  *)
+    echo "Usage: health_check {disk}"
+
+    ;;
+
+esac
+exit 0
