@@ -10,7 +10,7 @@
         "check": {
           "id": "redis-set",
           "name": "Redis set",
-          "script": "redis-cli set consul-test \"$(date)\"",
+          "script": "redis-cli -p <%= p("redis.port") %> set consul-test \"$(date)\" || exit 2",
           "interval": "5s"
         }
     }
