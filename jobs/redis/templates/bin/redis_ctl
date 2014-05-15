@@ -21,6 +21,7 @@ case $1 in
 
   stop)
     redis-cli shutdown
+    kill_and_wait $PIDFILE
 
     ;;
 
