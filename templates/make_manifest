@@ -2,9 +2,11 @@
 
 set -e
 
+template_prefix="redis"
+
 infrastructure=$1
 advertisement=$2
-template_prefix="redis"
+STEMCELL_OS=${STEMCELL_OS:-ubuntu}
 
 if [ "$infrastructure" != "aws-ec2" ] && \
     [ "$infrastructure" != "openstack-nova" ] && \
@@ -32,7 +34,6 @@ BOSH_STATUS=$(bosh status)
 DIRECTOR_UUID=$(echo "$BOSH_STATUS" | grep UUID | awk '{print $2}')
 DIRECTOR_CPI=$(echo "$BOSH_STATUS" | grep CPI | awk '{print $2}')
 DIRECTOR_NAME=$(echo "$BOSH_STATUS" | grep Name | awk '{print $2}')
-STEMCELL=$(bosh stemcells | grep bosh | awk -F'|' '{ print $2, $3 }' | sort -nr -k2 | head -n1 | awk '{ print $1 }')
 NAME=$template_prefix-$infrastructure
 
 if [[ $DIRECTOR_NAME = "warden" ]]; then
@@ -56,6 +57,18 @@ if [[ $infrastructure = "openstack-nova" ]]; then
   fi
 fi
 
+function latest_uploaded_stemcell {
+  bosh stemcells | grep bosh | grep $STEMCELL_OS | awk -F'|' '{ print $2, $3 }' | sort -nr -k2 | head -n1 | awk '{ print $1 }'
+}
+
+STEMCELL=$(latest_uploaded_stemcell)
+if [[ "${STEMCELL}X" == "X" ]]; then
+  echo
+  echo "Uploading latest $DIRECTOR_CPI/$STEMCELL_OS stemcell..."
+  STEMCELL_URL=$(bosh public stemcells --full | grep $DIRECTOR_CPI | grep $STEMCELL_OS | sort -nr | head -n1 | awk '{ print $4 }')
+  bosh upload stemcell $STEMCELL_URL
+fi
+STEMCELL=${STEMCELL:-latest_uploaded_stemcell}
 
 templates=$(dirname $0)
 release=$templates/..
