@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v6
+--
+
+- bug fix: Also kill redis server via pid
+
 v5
 --
 
