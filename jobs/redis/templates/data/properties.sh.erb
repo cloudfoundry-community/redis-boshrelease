@@ -6,9 +6,12 @@
 # e.g. JOB_NAME=redis, JOB_INDEX=0
 export NAME='<%= name %>'
 export JOB_INDEX=<%= index %>
-# full job name, like redis/0 or webapp/3
-export JOB_FULL="$NAME/$JOB_INDEX"
+# full job name, like redis-0 or webapp-3
+export JOB_FULL="$NAME-$JOB_INDEX"
+export DEPLOYMENT=<%= spec.deployment %>
 
 # % disk full levels
 export DISK_CRITICAL_LEVEL=<%= p("health.disk.critical") %>
 export DISK_WARNING_LEVEL=<%= p("health.disk.warning") %>
+
+export ROLE=<%= p("redis.master", false) ? "slave" : "master" %>
