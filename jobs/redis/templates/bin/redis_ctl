@@ -15,33 +15,37 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    # CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
-    # -prefix is not cleaning up template variables
-    # https://github.com/kelseyhightower/confd/issues/66
-    # currently demo with no prefix
-    CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv
-    until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
-      echo "waiting for consul agent API..."
-      sleep 5
-    done
+    if [[ "${CONSUL_ENABLED}X" != "X" ]]; then
 
-    if [[ "${MASTER:-}X" != "X" ]]; then
-      curl -i -XPUT $CONSUL_PREFIX/master -d${MASTER}
+      # CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
+      # -prefix is not cleaning up template variables
+      # https://github.com/kelseyhightower/confd/issues/66
+      # currently demo with no prefix
+      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv
+      until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
+        echo "waiting for consul agent API..."
+        sleep 5
+      done
+
+      if [[ "${MASTER:-}X" != "X" ]]; then
+        curl -i -XPUT $CONSUL_PREFIX/master -d${MASTER}
+      fi
+
+      until [[ -f /var/vcap/data/config/redis/redis.conf ]]; do
+        echo "redis waiting for confd to craete redis.conf..."
+        sleep 5
+      done
+
+      # /var/vcap/data/config/redis/redis.conf created by conf
+      exec redis-server /var/vcap/data/config/redis/redis.conf \
+           >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
+           2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log
+
+    else
+      # if not using consul/confd then regrade to static bosh config
+      exec redis-server /var/vcap/jobs/redis/config/redis.conf
+
     fi
-
-    # TODO: if not using consul/confd then regrade to static bosh config
-    # exec redis-server /var/vcap/jobs/redis/config/redis.conf
-
-    until [[ -f /var/vcap/data/config/redis/redis.conf ]]; do
-      echo "redis waiting for confd to craete redis.conf..."
-      sleep 5
-    done
-
-    # /var/vcap/data/config/redis/redis.conf created by conf
-    exec redis-server /var/vcap/data/config/redis/redis.conf \
-         >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
-         2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log
-
     ;;
 
   stop)
