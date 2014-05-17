@@ -27,6 +27,9 @@ properties:
   redis.master:
     description: IP address or hostname of the Redis master node
 
+  consul.service.name:
+    description: Name for advertising/discovering this service over consul
+
   health.interval:
     description: Interval for consul to perform health checks
     default: "20s"

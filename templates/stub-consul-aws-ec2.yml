@@ -1,6 +1,7 @@
 ---
 meta:
   environment: NAME
+  service_name: NAME
   security_groups:
     - redis-server
     - consul

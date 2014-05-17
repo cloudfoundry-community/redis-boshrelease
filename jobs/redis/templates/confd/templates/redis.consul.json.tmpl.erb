@@ -1,6 +1,6 @@
 {
     "service": {
-        "name": "redis",
+        "name": "<%= p("consul.service.name") %>",
         "tags": ["{{ .role }}"],
         "port": <%= p("redis.port") %>,
         "check": {
