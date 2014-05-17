@@ -15,10 +15,16 @@ case $1 in
   start)
     pid_guard $PIDFILE $OUTPUT_LABEL
 
+    # confd created service configuration files
+    rm -rf /var/vcap/data/config/redis
     mkdir -p /var/vcap/data/config/redis
-    mkdir -p /var/vcap/data/consul/redis
     chown vcap:vcap /var/vcap/data/config/redis
-    chown vcap:vcap /var/vcap/data/consul/redis
+
+    # confd created consul config files
+    rm -rf /var/vcap/data/consul
+    mkdir -p /var/vcap/data/consul
+    chown vcap:vcap /var/vcap/data/consul
+
 
     until chpst -u vcap:vcap confd -onetime -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
             >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
@@ -26,6 +32,9 @@ case $1 in
       echo "confd waiting for consul agent API..."
       sleep 5
     done
+
+    # created new consul service files, tell consul to load them
+    /var/vcap/jobs/consul/bin/consul_ctl reload
 
     echo $$ >> $PIDFILE
 
