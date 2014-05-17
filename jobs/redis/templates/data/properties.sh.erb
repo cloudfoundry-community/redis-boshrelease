@@ -14,4 +14,9 @@ export DEPLOYMENT=<%= spec.deployment %>
 export DISK_CRITICAL_LEVEL=<%= p("health.disk.critical") %>
 export DISK_WARNING_LEVEL=<%= p("health.disk.warning") %>
 
-export ROLE=<%= p("redis.master", false) ? "slave" : "master" %>
+<% if_p("redis.master") do |master_host| %>
+export ROLE=slave
+export MASTER=<%= master_host %>
+<% end.else do %>
+export ROLE=master
+<% end %>
