@@ -1,0 +1,47 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/redis/helpers/ctl_setup.sh 'redis' 'confd'
+
+export LANG=en_US.UTF-8
+
+echo redis confd $PIDFILE $(cat $PIDFILE)
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE $OUTPUT_LABEL
+
+    mkdir -p /var/vcap/data/config/redis
+    chown vcap:vcap /var/vcap/data/config/redis
+
+    until chpst -u vcap:vcap confd -onetime -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
+            >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
+            2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log; do
+      echo "waiting for consul agent API..."
+      sleep 5
+    done
+
+    echo $$ >> $PIDFILE
+
+    chpst -u vcap:vcap confd -interval $INTERVAL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
+      >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
+      2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log &
+
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+
+    ;;
+
+  *)
+    echo "Usage: confd_ctl {start|stop}"
+
+    ;;
+
+esac
+exit 0

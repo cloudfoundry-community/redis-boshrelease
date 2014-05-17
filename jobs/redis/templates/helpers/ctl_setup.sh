@@ -14,7 +14,7 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
 JOB_NAME=$1
-output_label=${1:-JOB_NAME}
+export OUTPUT_LABEL=${2:-JOB_NAME}
 
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 chmod 755 $JOB_DIR # to access file via symlink
@@ -25,7 +25,7 @@ chmod 755 $JOB_DIR # to access file via symlink
 source $JOB_DIR/data/properties.sh
 
 source $JOB_DIR/helpers/ctl_utils.sh
-redirect_output ${output_label}
+redirect_output ${OUTPUT_LABEL}
 
 export HOME=${HOME:-/home/vcap}
 
@@ -48,4 +48,4 @@ do
 done
 export TMPDIR=$TMP_DIR
 
-PIDFILE=$RUN_DIR/$JOB_NAME.pid
+PIDFILE=$RUN_DIR/$OUTPUT_LABEL.pid
