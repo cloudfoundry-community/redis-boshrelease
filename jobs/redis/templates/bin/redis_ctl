@@ -14,10 +14,23 @@ case $1 in
     pid_guard $PIDFILE $JOB_NAME
 
     CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
-    curl -XPUT $CONSUL_PREFIX/role -d${ROLE}
+    # -prefix is not cleaning up template variables
+    # https://github.com/kelseyhightower/confd/issues/66
+    # currently demo with no prefix
+    # CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv
+    until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
+      echo "waiting for consul agent API..."
+      sleep 5
+    done
+
     if [[ "${MASTER:-}X" != "X" ]]; then
-      curl -XPUT $CONSUL_PREFIX/master -d${MASTER}
+      curl -i -XPUT $CONSUL_PREFIX/master -d${MASTER}
     fi
+
+    # currently need to create files in same device
+    # as /tmp (which is the root device)
+    mkdir -p /var/vcap/confd/config/redis
+    chown vcap:vcap /var/vcap/confd/config/redis
 
     exec redis-server $JOB_DIR/config/redis.conf \
          >>$LOG_DIR/$JOB_NAME.stdout.log \
