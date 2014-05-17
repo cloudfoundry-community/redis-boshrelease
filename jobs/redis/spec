@@ -13,8 +13,10 @@ templates:
   config/redis.conf.erb: config/redis.conf
   consul/redis.json.erb: consul/redis.json
   consul/redis-disk-level.json.erb: consul/redis-disk-level.json
-  confd/conf.d/redis.toml: confd/conf.d/redis.toml
+  confd/conf.d/redis.conf.toml: confd/conf.d/redis.conf.toml
+  confd/conf.d/redis.consul.toml: confd/conf.d/redis.consul.toml
   confd/templates/redis.conf.tmpl.erb: confd/templates/redis.conf.tmpl
+  confd/templates/redis.consul.json.tmpl.erb: confd/templates/redis.consul.json.tmpl
 properties:
   redis.port:
     description: Port to listen for requests to redis server

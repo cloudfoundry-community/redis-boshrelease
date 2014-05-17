@@ -15,11 +15,11 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
+    # CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
     # -prefix is not cleaning up template variables
     # https://github.com/kelseyhightower/confd/issues/66
     # currently demo with no prefix
-    # CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv
+    CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv
     until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
       echo "waiting for consul agent API..."
       sleep 5
@@ -47,6 +47,13 @@ case $1 in
   stop)
     redis-cli shutdown
     kill_and_wait $PIDFILE
+
+    ;;
+
+  reload)
+    echo redis reloading...
+    $JOB_DIR/bin/redis_ctl stop
+    $JOB_DIR/bin/redis_ctl start
 
     ;;
 

@@ -16,7 +16,9 @@ case $1 in
     pid_guard $PIDFILE $OUTPUT_LABEL
 
     mkdir -p /var/vcap/data/config/redis
+    mkdir -p /var/vcap/data/consul/redis
     chown vcap:vcap /var/vcap/data/config/redis
+    chown vcap:vcap /var/vcap/data/consul/redis
 
     until chpst -u vcap:vcap confd -onetime -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
             >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
