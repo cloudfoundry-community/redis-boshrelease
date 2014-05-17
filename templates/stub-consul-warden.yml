@@ -21,6 +21,8 @@ releases:
 properties:
   redis: {}
   consul:
+    service:
+      name: (( meta.service_name ))
     servers:
       - 10.244.4.6
       - 10.244.4.10

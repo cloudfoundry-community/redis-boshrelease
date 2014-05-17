@@ -27,7 +27,7 @@ properties:
     description: IP address or hostname of the Redis master node
 
   consul.service.name:
-    description: Name for advertising/discovering this service over consul
+    description: Name for advertising/discovering this service over consul (defaults to deployment name)
 
   health.interval:
     description: Interval for consul to perform health checks

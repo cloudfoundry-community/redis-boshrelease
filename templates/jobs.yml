@@ -3,7 +3,6 @@ networks: (( merge ))
 meta:
   environment: ~
   job_templates: (( merge ))
-  service_name: (( merge ))
 
 jobs:
   - name: redis_leader_z1
@@ -29,7 +28,4 @@ jobs:
         master: (( merge ))
 
 properties:
-  consul:
-    servers: (( merge ))
-    service:
-      name: (( meta.service_name ))
+  consul: ~
