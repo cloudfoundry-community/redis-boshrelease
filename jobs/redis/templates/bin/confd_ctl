@@ -21,7 +21,7 @@ case $1 in
     until chpst -u vcap:vcap confd -onetime -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
             >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
             2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log; do
-      echo "waiting for consul agent API..."
+      echo "confd waiting for consul agent API..."
       sleep 5
     done
 

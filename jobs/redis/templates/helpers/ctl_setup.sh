@@ -14,7 +14,7 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
 JOB_NAME=$1
-export OUTPUT_LABEL=${2:-JOB_NAME}
+export OUTPUT_LABEL=${2:-$JOB_NAME}
 
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 chmod 755 $JOB_DIR # to access file via symlink
