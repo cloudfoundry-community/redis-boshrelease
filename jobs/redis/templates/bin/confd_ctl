@@ -38,7 +38,7 @@ case $1 in
 
     echo $$ >> $PIDFILE
 
-    chpst -u vcap:vcap confd -interval $INTERVAL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
+    chpst -u vcap:vcap confd -interval $CONFD_INTERVAL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
       >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
       2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log &
 
