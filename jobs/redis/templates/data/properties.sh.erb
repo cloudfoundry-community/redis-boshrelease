@@ -10,8 +10,6 @@ export JOB_INDEX=<%= index %>
 export JOB_FULL="$NAME-$JOB_INDEX"
 export DEPLOYMENT=<%= spec.deployment %>
 
-export CONSUL_ENABLED=$(if [[ -d /var/vcap/jobs/consul ]]; then echo "1"; fi)
-
 # % disk full levels
 export DISK_CRITICAL_LEVEL=<%= p("health.disk.critical") %>
 export DISK_WARNING_LEVEL=<%= p("health.disk.warning") %>
@@ -23,4 +21,6 @@ export MASTER=<%= master_host %>
 export ROLE=master
 <% end %>
 
-export INTERVAL=30
+export CONFD_INTERVAL=30
+
+export CONSUL_ENABLED="<%= '1' if spec.job.templates.find {|tmpl| tmpl.name == "consul" } %>"
