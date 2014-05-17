@@ -8,8 +8,8 @@ meta:
 update:
   canaries: 1
   max_in_flight: 50
-  canary_watch_time: 1000-30000
-  update_watch_time: 1000-30000
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
 
 jobs:
   - name: redis_leader_z1
