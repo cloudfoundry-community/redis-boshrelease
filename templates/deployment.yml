@@ -30,8 +30,8 @@ compilation:
 update:
   canaries: 1
   max_in_flight: 1
-  canary_watch_time: 30000-60000
-  update_watch_time: 5000-60000
+  canary_watch_time: 30000-100000
+  update_watch_time: 5000-100000
 
 resource_pools:
   - name: small_z1

@@ -26,3 +26,6 @@ jobs:
     properties:
       redis:
         master: (( merge ))
+
+properties:
+  consul: ~

@@ -1,11 +1,7 @@
 {
     "service": {
-        "name": "redis",
-        <% if_p("redis.master") do %>
-        "tags": ["slave"],
-        <% end.else do %>
-        "tags": ["master"],
-        <% end %>
+        "name": "<%= p("consul.service.name", spec.deployment) %>",
+        "tags": ["{{ .role }}"],
         "port": <%= p("redis.port") %>,
         "check": {
           "id": "redis-set",

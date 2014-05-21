@@ -6,9 +6,21 @@
 # e.g. JOB_NAME=redis, JOB_INDEX=0
 export NAME='<%= name %>'
 export JOB_INDEX=<%= index %>
-# full job name, like redis/0 or webapp/3
-export JOB_FULL="$NAME/$JOB_INDEX"
+# full job name, like redis-0 or webapp-3
+export JOB_FULL="$NAME-$JOB_INDEX"
+export DEPLOYMENT=<%= spec.deployment %>
 
 # % disk full levels
 export DISK_CRITICAL_LEVEL=<%= p("health.disk.critical") %>
 export DISK_WARNING_LEVEL=<%= p("health.disk.warning") %>
+
+<% if_p("redis.master") do |master_host| %>
+export ROLE=slave
+export MASTER=<%= master_host %>
+<% end.else do %>
+export ROLE=master
+<% end %>
+
+export CONFD_INTERVAL=30
+
+export CONSUL_ENABLED="<%= '1' if spec.job.templates.find {|tmpl| tmpl.name == "consul" } %>"

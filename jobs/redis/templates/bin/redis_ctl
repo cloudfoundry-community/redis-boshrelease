@@ -8,20 +8,52 @@ source /var/vcap/jobs/redis/helpers/ctl_setup.sh 'redis'
 
 export LANG=en_US.UTF-8
 
+echo redis redis $PIDFILE $(cat $PIDFILE)
+
 case $1 in
 
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    exec redis-server $JOB_DIR/config/redis.conf \
-         >>$LOG_DIR/$JOB_NAME.stdout.log \
-         2>>$LOG_DIR/$JOB_NAME.stderr.log
+    if [[ "${CONSUL_ENABLED}X" != "X" ]]; then
 
+      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
+      until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
+        echo "waiting for consul agent API..."
+        sleep 5
+      done
+
+      if [[ "${MASTER:-}X" != "X" ]]; then
+        curl -i -XPUT $CONSUL_PREFIX/master -d${MASTER}
+      fi
+
+      until [[ -f /var/vcap/data/config/redis/redis.conf ]]; do
+        echo "redis waiting for confd to craete redis.conf..."
+        sleep 5
+      done
+
+      # /var/vcap/data/config/redis/redis.conf created by conf
+      exec redis-server /var/vcap/data/config/redis/redis.conf \
+           >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
+           2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log
+
+    else
+      # if not using consul/confd then regrade to static bosh config
+      exec redis-server /var/vcap/jobs/redis/config/redis.conf
+
+    fi
     ;;
 
   stop)
     redis-cli shutdown
     kill_and_wait $PIDFILE
+
+    ;;
+
+  reload)
+    echo redis reloading...
+    $JOB_DIR/bin/redis_ctl stop
+    $JOB_DIR/bin/redis_ctl start
 
     ;;
 

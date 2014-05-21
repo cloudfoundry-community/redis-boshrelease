@@ -1,6 +1,7 @@
 ---
 meta:
   environment: NAME
+  service_name: NAME
   security_groups:
     - redis-server
     - consul
@@ -21,6 +22,8 @@ releases:
 properties:
   redis: {}
   consul:
+    service:
+      name: (( meta.service_name ))
     servers:
       - 0.consul-bootstrap-z1.consul1.consul-aws-ec2.microbosh
       - 0.consul-server-z1.consul1.consul-aws-ec2.microbosh
