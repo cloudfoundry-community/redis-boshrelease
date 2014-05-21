@@ -4,6 +4,8 @@ Change Log
 v7
 --
 
+Progress towards Redis cluster being able to failover and dynamically reconfigure itself.
+
 - [consul] redis.conf and consul's redis.json created by confd (from consul kv) rather than directly from BOSH
 
 v6
