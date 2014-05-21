@@ -17,11 +17,7 @@ case $1 in
 
     if [[ "${CONSUL_ENABLED}X" != "X" ]]; then
 
-      # CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
-      # -prefix is not cleaning up template variables
-      # https://github.com/kelseyhightower/confd/issues/66
-      # currently demo with no prefix
-      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv
+      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
       until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
         echo "waiting for consul agent API..."
         sleep 5

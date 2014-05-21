@@ -26,7 +26,9 @@ case $1 in
     chown vcap:vcap /var/vcap/data/consul
 
 
-    until chpst -u vcap:vcap confd -onetime -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
+    CONFD_CONFIG="-prefix cluster/$DEPLOYMENT/nodes/$JOB_FULL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul"
+
+    until chpst -u vcap:vcap confd -onetime $CONFD_CONFIG \
             >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
             2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log; do
       echo "confd waiting for consul agent API..."
@@ -36,11 +38,11 @@ case $1 in
     # created new consul service files, tell consul to load them
     /var/vcap/jobs/consul/bin/consul_ctl reload
 
-    echo $$ >> $PIDFILE
-
-    chpst -u vcap:vcap confd -interval $CONFD_INTERVAL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul
+    chpst -u vcap:vcap confd -interval $CONFD_INTERVAL $CONFD_CONFIG \
       >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
       2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log &
+
+    echo $! >> $PIDFILE
 
     ;;
 
