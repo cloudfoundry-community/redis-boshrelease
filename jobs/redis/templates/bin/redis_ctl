@@ -26,7 +26,8 @@ case $1 in
       done
 
 
-      envconsul $PREFIX $JOB_DIR/bin/initialize_kv
+      envconsul $PREFIX $JOB_DIR/bin/initialize_kv $CONSUL_PREFIX $INITIAL_ROLE $INITIAL_MASTER
+
 
       until [[ -f /var/vcap/data/config/redis/redis.conf ]]; do
         echo "redis waiting for confd to craete redis.conf..."

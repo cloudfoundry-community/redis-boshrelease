@@ -19,6 +19,7 @@ export INITIAL_ROLE=slave
 export INITIAL_MASTER=<%= master_host %>
 <% end.else do %>
 export INITIAL_ROLE=master
+export INITIAL_MASTER=''
 <% end %>
 
 export CONFD_INTERVAL=30

@@ -1,14 +1,18 @@
 #!/bin/bash
 
+CONSUL_PREFIX=$1
+INITIAL_ROLE=$2
+INITIAL_MASTER=$3
+
 if [[ "${role}X" = "X" ]]; then
   echo "setup initial kv for redis..."
 
   if [[ "${INITIAL_MASTER:-}X" != "X" ]]; then
-    curl -i -XPUT $CONSUL_PREFIX/master -d${INITIAL_MASTER}
+    curl -XPUT $CONSUL_PREFIX/master -d${INITIAL_MASTER}
   else
-    curl -i -XDELETE $CONSUL_PREFIX/master
+    curl -XDELETE $CONSUL_PREFIX/master
   fi
-  curl -i -XPUT $CONSUL_PREFIX/role -d${INITIAL_ROLE}
+  curl -XPUT $CONSUL_PREFIX/role -d${INITIAL_ROLE}
 else
   echo "kv already setup; skipping."
 fi
