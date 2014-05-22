@@ -26,7 +26,7 @@ case $1 in
     chown vcap:vcap /var/vcap/data/consul
 
 
-    CONFD_CONFIG="-prefix cluster/$DEPLOYMENT/nodes/$JOB_FULL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul"
+    CONFD_CONFIG="-prefix=cluster/$DEPLOYMENT/nodes/$JOB_FULL -confdir=/var/vcap/jobs/$JOB_NAME/confd -consul -verbose=true -debug=true "
 
     until confd -onetime $CONFD_CONFIG \
             >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \

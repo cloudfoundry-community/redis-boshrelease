@@ -15,10 +15,10 @@ export DISK_CRITICAL_LEVEL=<%= p("health.disk.critical") %>
 export DISK_WARNING_LEVEL=<%= p("health.disk.warning") %>
 
 <% if_p("redis.master") do |master_host| %>
-export ROLE=slave
-export MASTER=<%= master_host %>
+export INITIAL_ROLE=slave
+export INITIAL_MASTER=<%= master_host %>
 <% end.else do %>
-export ROLE=master
+export INITIAL_ROLE=master
 <% end %>
 
 export CONFD_INTERVAL=30

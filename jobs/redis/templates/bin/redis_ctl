@@ -17,15 +17,16 @@ case $1 in
 
     if [[ "${CONSUL_ENABLED}X" != "X" ]]; then
 
-      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/cluster/$DEPLOYMENT/nodes/$JOB_FULL
-      until curl -i -XPUT $CONSUL_PREFIX/role -d${ROLE}; do
+      PREFIX=cluster/$DEPLOYMENT/nodes/$JOB_FULL
+      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/$PREFIX
+
+      until curl -i -XPUT $CONSUL_PREFIX/initiation -dtrue; do
         echo "waiting for consul agent API..."
         sleep 5
       done
 
-      if [[ "${MASTER:-}X" != "X" ]]; then
-        curl -i -XPUT $CONSUL_PREFIX/master -d${MASTER}
-      fi
+
+      envconsul $PREFIX $JOB_DIR/bin/initialize_kv
 
       until [[ -f /var/vcap/data/config/redis/redis.conf ]]; do
         echo "redis waiting for confd to craete redis.conf..."
