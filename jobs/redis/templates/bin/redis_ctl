@@ -33,9 +33,7 @@ case $1 in
       done
 
       # /var/vcap/data/config/redis/redis.conf created by conf
-      exec redis-server /var/vcap/data/config/redis/redis.conf \
-           >>$LOG_DIR/$OUTPUT_LABEL.stdout.log \
-           2>>$LOG_DIR/$OUTPUT_LABEL.stderr.log
+      exec redis-server /var/vcap/data/config/redis/redis.conf
 
     else
       # if not using consul/confd then regrade to static bosh config
