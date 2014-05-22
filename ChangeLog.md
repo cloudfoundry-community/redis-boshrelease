@@ -1,6 +1,18 @@
 Change Log
 ==========
 
+v8
+--
+
+Demo of manual failover of a cluster:
+
+![cluster failover](http://cl.ly/image/332G1X242T1U/consul-manual-failover.gif)
+
+- cluster KV only initialized once, not on each restart of monit
+- redis now logging to file instead of stdout
+- confd can successfully reload redis & consul (it is now running as root)
+- `make_manifest` - specify name of deployment/service name with $NAME
+
 v7
 --
 
