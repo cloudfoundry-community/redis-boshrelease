@@ -38,6 +38,12 @@ templates/make_manifest aws-ec2
 bosh -n deploy
 ```
 
+To rename the deployment, set the `$NAME` environment variable:
+
+```
+NAME=my-redis templates/make_manifest warden normal
+```
+
 ### Consul service advertisement
 
 Co-locate the `consul` job template from the [consul-boshrelease](https://github.com/cloudfoundry-community/consul-boshrelease) and the deployment will automatically advertise each VM on [consul](http://consul.io).
