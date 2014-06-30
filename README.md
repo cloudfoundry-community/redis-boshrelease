@@ -18,7 +18,7 @@ To deploy it you will need the source repository that contains templates:
 
 ```
 git clone https://github.com/cloudfoundry-community/redis-boshrelease.git
-cd docker-registry-boshrelease
+cd redis-boshrelease
 git checkout v5
 ```
 
