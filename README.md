@@ -8,13 +8,18 @@ Supports [consul](http://consul.io) for service advertisements.
 Usage
 -----
 
-To use this bosh release, first upload it to your bosh:
+To use this BOSH release, first upload it to your bosh:
 
 ```
-bosh target BOSH_HOST
+bosh upload release https://redis-boshrelease.s3.amazonaws.com/boshrelease-redis-5.tgz
+```
+
+To deploy it you will need the source repository that contains templates:
+
+```
 git clone https://github.com/cloudfoundry-community/redis-boshrelease.git
-cd redis-boshrelease
-bosh upload release releases/redis-8.yml
+cd docker-registry-boshrelease
+git checkout v5
 ```
 
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a 3 VM cluster:
