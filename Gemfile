@@ -5,3 +5,5 @@ group :test do
   gem 'rspec'
   gem 'bosh_cli'
 end
+
+gem 'bosh-gen'
