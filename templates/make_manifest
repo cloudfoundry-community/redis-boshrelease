@@ -10,8 +10,9 @@ STEMCELL_OS=${STEMCELL_OS:-ubuntu}
 
 if [ "$infrastructure" != "aws-ec2" ] && \
     [ "$infrastructure" != "openstack-nova" ] && \
-    [ "$infrastructure" != "warden" ] ; then
-  echo "usage: ./make_manifest <warden|aws-ec2|openstack-nova> <normal|consul>"
+    [ "$infrastructure" != "warden" ] &&
+    [ "$infrastructure" != "example" ] ; then
+  echo "usage: ./make_manifest <example|warden|aws-ec2|openstack-nova> <normal|consul>"
   exit 1
 fi
 
@@ -55,6 +56,11 @@ if [[ $infrastructure = "openstack-nova" ]]; then
     echo "Not targeting an OpenStack BOSH. Please use 'bosh target' before running this script."
     exit 1
   fi
+fi
+
+# Build example manifest with warden templates
+if [[ $infrastructure = "example" ]]; then
+  infrastructure="warden"
 fi
 
 function latest_uploaded_stemcell {
