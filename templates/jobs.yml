@@ -13,6 +13,9 @@ jobs:
       - name: redis1
         static_ips: ~
     persistent_disk: 0
+    properties:
+      redis: ~
+      network: redis1
   - name: redis_z1
     templates: (( meta.job_templates ))
     instances: 0
@@ -26,6 +29,7 @@ jobs:
     properties:
       redis:
         master: (( merge ))
+      network: redis1
 
 properties:
   consul: ~

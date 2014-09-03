@@ -30,6 +30,7 @@ jobs:
     properties:
       redis:
         master: (( "0.redis-leader-z1.redis1." meta.environment ".microbosh" ))
+      network: redis1
 
 compilation:
   cloud_properties:

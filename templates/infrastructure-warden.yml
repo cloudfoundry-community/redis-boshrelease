@@ -25,6 +25,7 @@ jobs:
     properties:
       redis:
         master: (( jobs.redis_leader_z1.networks.redis1.static_ips.[0] ))
+      network: redis1
 
 compilation:
   cloud_properties:

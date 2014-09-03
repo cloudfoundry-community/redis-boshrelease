@@ -20,11 +20,8 @@ releases:
   - name: consul
     version: latest
 properties:
-  redis: {}
   consul:
     service:
       name: (( meta.service_name ))
-    servers:
-      - 0.consul-bootstrap-z1.consul1.consul-aws-ec2.microbosh
-      - 0.consul-server-z1.consul1.consul-aws-ec2.microbosh
-      - 1.consul-server-z1.consul1.consul-aws-ec2.microbosh
+    cluster:
+      join_host: 0.consul-z1.consul1.consul-aws-ec2.microbosh

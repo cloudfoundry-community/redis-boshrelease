@@ -19,10 +19,8 @@ releases:
   - name: consul
     version: latest
 properties:
-  redis: {}
   consul:
     service:
       name: (( meta.service_name ))
-    servers:
-      - 10.244.4.6
-      - 10.244.4.10
+    cluster:
+      join_host: 10.244.4.6
