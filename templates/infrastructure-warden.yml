@@ -2,7 +2,7 @@ meta:
   environment: redis-warden
 
   stemcell:
-    name: bosh-warden-boshlite-ubuntu
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
     version: latest
 
 update:
@@ -17,8 +17,10 @@ jobs:
     networks:
       - name: redis1
         static_ips: (( static_ips(1) ))
+    persistent_disk: 4096
   - name: redis_z1
     instances: 2
+    persistent_disk: 4096
     networks:
       - name: redis1
         static_ips: (( static_ips(2,3) ))
