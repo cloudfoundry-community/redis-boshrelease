@@ -3,7 +3,7 @@ meta:
   security_groups: (( merge ))
 
   stemcell:
-    name: bosh-aws-xen-ubuntu
+    name: bosh-aws-xen-ubuntu-trusty-go_agent
     version: latest
 
   persistent_disk: 4096
