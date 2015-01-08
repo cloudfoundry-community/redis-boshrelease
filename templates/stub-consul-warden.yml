@@ -23,4 +23,4 @@ properties:
     service:
       name: (( meta.service_name ))
     cluster:
-      join_host: 10.244.4.6
+      join_host: 10.244.2.6
