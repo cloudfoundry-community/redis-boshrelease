@@ -39,7 +39,7 @@ bosh -n deploy
 For AWS EC2, create a three-node clusterg:
 
 ```
-templates/make_manifest aws-ec2
+templates/make_manifest aws-ec2 normal
 bosh -n deploy
 ```
 
