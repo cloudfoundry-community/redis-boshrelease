@@ -1,5 +1,5 @@
 ---
-name: redis
+name: redis-server
 dependencies: []
 files:
 - redis/redis-2.8.3.tar.gz
