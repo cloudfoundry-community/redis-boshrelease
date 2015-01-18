@@ -21,7 +21,3 @@ export INITIAL_MASTER=<%= master_host %>
 export INITIAL_ROLE=master
 export INITIAL_MASTER=''
 <% end %>
-
-export CONFD_INTERVAL=30
-
-export CONSUL_ENABLED="<%= '1' if spec.job.templates.find {|tmpl| tmpl.name == "consul" } %>"

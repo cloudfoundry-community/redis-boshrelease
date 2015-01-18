@@ -13,6 +13,6 @@ describe 'redis release' do
     output = %x{bosh create release --force}
     result = $?
     puts output unless result == 0
-    result.should == 0
+    expect(result).to eq 0
   end
 end

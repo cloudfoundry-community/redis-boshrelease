@@ -1,11 +1,3 @@
-<% if spec.job.templates.find {|tmpl| tmpl.name == "consul" } %>
-check process redis_confd
-  with pidfile /var/vcap/sys/run/redis/confd.pid
-  start program "/var/vcap/jobs/redis/bin/monit_debugger confd_ctl '/var/vcap/jobs/redis/bin/confd_ctl start'"
-  stop program "/var/vcap/jobs/redis/bin/monit_debugger confd_ctl '/var/vcap/jobs/redis/bin/confd_ctl stop'"
-  group vcap
-<% end %>
-
 check process redis
   with pidfile /var/vcap/sys/run/redis/redis.pid
   start program "/var/vcap/jobs/redis/bin/monit_debugger redis_ctl '/var/vcap/jobs/redis/bin/redis_ctl start'"

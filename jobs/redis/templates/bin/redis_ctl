@@ -15,33 +15,7 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    if [[ "${CONSUL_ENABLED}X" != "X" ]]; then
-
-      PREFIX=cluster/$DEPLOYMENT/nodes/$JOB_FULL
-      CONSUL_PREFIX=http://127.0.0.1:8500/v1/kv/$PREFIX
-
-      until curl -i -XPUT $CONSUL_PREFIX/initiation -dtrue; do
-        echo "waiting for consul agent API..."
-        sleep 5
-      done
-
-
-      envconsul $PREFIX $JOB_DIR/bin/initialize_kv $CONSUL_PREFIX $INITIAL_ROLE $INITIAL_MASTER
-
-
-      until [[ -f /var/vcap/data/config/redis/redis.conf ]]; do
-        echo "redis waiting for confd to craete redis.conf..."
-        sleep 5
-      done
-
-      # /var/vcap/data/config/redis/redis.conf created by conf
-      exec redis-server /var/vcap/data/config/redis/redis.conf
-
-    else
-      # if not using consul/confd then regrade to static bosh config
-      exec redis-server /var/vcap/jobs/redis/config/redis.conf
-
-    fi
+    exec redis-server /var/vcap/jobs/redis/config/redis.conf
     ;;
 
   stop)
