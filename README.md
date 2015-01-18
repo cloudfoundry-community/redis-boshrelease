@@ -19,13 +19,12 @@ To deploy it you will need the source repository that contains templates:
 ```
 git clone https://github.com/cloudfoundry-community/redis-boshrelease.git
 cd redis-boshrelease
-git checkout v5
 ```
 
-For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a 3 VM cluster:
+For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a three-node cluster:
 
 ```
-templates/make_manifest warden normal
+templates/make_manifest warden
 bosh -n deploy
 ```
 
@@ -39,42 +38,35 @@ bosh -n deploy
 For AWS EC2, create a three-node clusterg:
 
 ```
-templates/make_manifest aws-ec2 normal
+templates/make_manifest aws-ec2
 bosh -n deploy
 ```
 
 To rename the deployment, set the `$NAME` environment variable:
 
 ```
-NAME=my-redis templates/make_manifest warden normal
+NAME=my-redis templates/make_manifest warden
 ```
 
 ### Consul service advertisement
 
-Co-locate the `consul` job template from the [consul-boshrelease](https://github.com/cloudfoundry-community/consul-boshrelease) and the deployment will automatically advertise each VM on [consul](http://consul.io).
+If you are using consul, you can co-locate the [redis-consul-boshrelease](https://github.com/cloudfoundry-community/redis-consul-boshrelease) and [consul-boshrelease](https://github.com/cloudfoundry-community/consul-boshrelease) to advertise and health monitor each redis node.
 
-There is an example available for bosh-lite.
+See https://github.com/cloudfoundry-community/redis-consul-boshrelease for instructions, which replace these instructions above.
 
-First, deploy the `consul-boshrelease` into bosh-lite. The redis templates for consul are pre-configured to find the consul cluster:
-
-```
-templates/make_manifest warden consul
-bosh -n deploy
-```
-
-To confirm that redis is now discoverable on any VM connected to the consul cluster (including the 3 redis VMs deployed above), target the [consul DNS](http://www.consul.io/docs/agent/dns.html) service:
+Once running, to confirm that redis is now discoverable on any VM connected to the consul cluster (including the 3 redis VMs deployed above), target the [consul DNS](http://www.consul.io/docs/agent/dns.html) service:
 
 ```
 $ bosh ssh redis_leader_z1/0
 
-# dig @127.0.0.1 -p 8600 redis.service.consul +short
+# dig @127.0.0.1 redis-warden.service.consul +short
 10.244.2.14
 10.244.2.10
 10.244.2.6
 
-# dig @127.0.0.1 -p 8600 master.redis.service.consul +short
+# dig @127.0.0.1 master.redis-warden.service.consul +short
 10.244.2.6
-# dig @127.0.0.1 -p 8600 slave.redis.service.consul +short
+# dig @127.0.0.1 slave.redis-warden.service.consul +short
 10.244.2.14
 10.244.2.10
 ```
@@ -83,7 +75,7 @@ From any machine running the consul agent you can also discover the redis cluste
 
 ```
 $ curl 127.0.0.1:8500/v1/catalog/services
-{"consul":null,"redis":["master","slave"]}
+{"consul":null,"redis":["master","slave","write","read"]}
 
 $ curl 127.0.0.1:8500/v1/catalog/service/redis?tag=master
 [{"Node":"redis-warden-redis_leader_z1-0","Address":"10.244.2.6","ServiceID":"redis","ServiceName":"redis","ServiceTags":["master"],"ServicePort":6379}]
