@@ -30,6 +30,3 @@ jobs:
       redis:
         master: (( merge ))
       network: redis1
-
-properties:
-  consul: ~

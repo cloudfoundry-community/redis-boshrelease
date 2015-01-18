@@ -3,7 +3,6 @@ name: redis
 packages:
 - redis-server
 templates:
-  bin/confd_ctl: bin/confd_ctl
   bin/redis_ctl: bin/redis_ctl
   bin/health_check: bin/health_check
   bin/monit_debugger: bin/monit_debugger
@@ -12,11 +11,6 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/redis.conf.erb: config/redis.conf
-  consul/redis-disk-level.json.erb: consul/redis-disk-level.json
-  confd/conf.d/redis.conf.toml: confd/conf.d/redis.conf.toml
-  confd/conf.d/redis.consul.toml: confd/conf.d/redis.consul.toml
-  confd/templates/redis.conf.tmpl.erb: confd/templates/redis.conf.tmpl
-  confd/templates/redis.consul.json.tmpl.erb: confd/templates/redis.consul.json.tmpl
 properties:
   redis.port:
     description: Port to listen for requests to redis server
