@@ -3,7 +3,7 @@ Bosh release for redis [![Build Status](https://travis-ci.org/cloudfoundry-commu
 
 One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is to deploy this bosh release.
 
-Supports [consul](http://consul.io) for service advertisements.
+NEW: For [consul](http://consul.io) support for service & health advertisements, see https://github.com/cloudfoundry-community/redis-consul-boshrelease
 
 Usage
 -----
@@ -11,7 +11,7 @@ Usage
 To use this BOSH release, first upload it to your bosh:
 
 ```
-bosh upload release https://redis-boshrelease.s3.amazonaws.com/boshrelease-redis-5.tgz
+bosh upload release https://community-shared-boshreleases.s3.amazonaws.com/boshrelease-redis-9.tgz
 ```
 
 To deploy it you will need the source repository that contains templates:
