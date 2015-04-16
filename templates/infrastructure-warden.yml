@@ -19,11 +19,9 @@ jobs:
         static_ips: (( static_ips(1) ))
     persistent_disk: 4096
   - name: redis_z1
-    instances: 2
     persistent_disk: 4096
     networks:
       - name: redis1
-        static_ips: (( static_ips(2,3) ))
     properties:
       redis:
         master: (( jobs.redis_leader_z1.networks.redis1.static_ips.[0] ))

@@ -9,6 +9,7 @@ meta:
       release: redis
   stemcell:
     name: STEMCELL
+  slaves: 4
 
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 releases:

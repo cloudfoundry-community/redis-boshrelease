@@ -3,6 +3,7 @@ networks: (( merge ))
 meta:
   environment: ~
   job_templates: (( merge ))
+  slaves: (( merge ))
 
 jobs:
   - name: redis_leader_z1
@@ -18,7 +19,7 @@ jobs:
       network: redis1
   - name: redis_z1
     templates: (( meta.job_templates ))
-    instances: 0
+    instances: (( meta.slaves ))
     resource_pool: small_z1
     networks:
       - name: redis1

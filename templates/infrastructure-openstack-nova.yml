@@ -18,7 +18,6 @@ jobs:
       - name: redis1
         static_ips: ~
   - name: redis_z1
-    instances: 2
     networks:
       - name: redis1
         static_ips: ~
