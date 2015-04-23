@@ -10,6 +10,7 @@ meta:
   stemcell:
     name: STEMCELL
   slaves: 4
+  password: red!s
 
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 releases:

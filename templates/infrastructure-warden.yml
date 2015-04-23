@@ -26,6 +26,12 @@ jobs:
       redis:
         master: (( jobs.redis_leader_z1.networks.redis1.static_ips.[0] ))
       network: redis1
+  - name: acceptance-tests
+    networks:
+      - name: redis1
+    properties:
+      redis:
+        master: (( jobs.redis_leader_z1.networks.redis1.static_ips.[0] ))
 
 compilation:
   cloud_properties:
