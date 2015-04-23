@@ -5,13 +5,15 @@ One of the fastest ways to get [redis](http://redis.io) running on any infrastru
 
 NEW: For [consul](http://consul.io) support for service & health advertisements, see https://github.com/cloudfoundry-community/redis-consul-boshrelease
 
+To find available releases, learn about the jobs and packages in each release visit https://bosh.io/releases/github.com/cloudfoundry-community/redis-boshrelease
+
 Usage
 -----
 
 To use this BOSH release, first upload it to your bosh:
 
 ```
-bosh upload release https://community-shared-boshreleases.s3.amazonaws.com/boshrelease-redis-9.tgz
+bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease
 ```
 
 To deploy it you will need the source repository that contains templates:
