@@ -17,8 +17,18 @@ redis-cli -h $MASTER -p ${PORT}${PASSWORD_FLAG} set rats running
 rats=$(redis-cli -h $MASTER -p ${PORT}${PASSWORD_FLAG} get rats)
 
 if [[ "${rats}" == "running" ]]; then
-  echo "Sanity check passed"
+  echo "Write/read to master - passed"
 else
+  echo "Write/read to master - failed"
+  EXITSTATUS=1
+fi
+
+rats=$(redis-cli -h $SLAVE -p ${PORT}${PASSWORD_FLAG} get rats)
+
+if [[ "${rats}" == "running" ]]; then
+  echo "Read from slave - passed"
+else
+  echo "Read from slave - failed"
   EXITSTATUS=1
 fi
 

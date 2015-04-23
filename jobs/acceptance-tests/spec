@@ -15,3 +15,5 @@ properties:
     default: "r3d!s"
   redis.master:
     description: IP address or hostname of the Redis master node
+  redis.slave:
+    description: IP address or hostname of a Redis slave node

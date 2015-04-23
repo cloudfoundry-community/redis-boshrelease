@@ -11,5 +11,6 @@ export JOB_FULL="$NAME-$JOB_INDEX"
 export DEPLOYMENT=<%= spec.deployment %>
 
 export MASTER=<%= p("redis.master") %>
+export SLAVE=<%= p("redis.slave") %>
 export PORT=<%= p("redis.port") %>
 export PASSWORD=<%= p("redis.password") %>
