@@ -3,7 +3,9 @@ networks: (( merge ))
 meta:
   environment: ~
   job_templates: (( merge ))
-  slaves: (( merge ))
+  test_slaves: 0
+  slaves: 0
+  password: (( merge ))
 
 jobs:
   - name: redis_leader_z1
@@ -15,7 +17,8 @@ jobs:
         static_ips: ~
     persistent_disk: 0
     properties:
-      redis: ~
+      redis:
+        password: (( meta.password ))
       network: redis1
   - name: redis_z1
     templates: (( meta.job_templates ))
@@ -30,4 +33,33 @@ jobs:
     properties:
       redis:
         master: (( merge ))
+        password: (( meta.password ))
       network: redis1
+  - name: redis_test_slave_z1
+    templates: (( meta.job_templates ))
+    instances: (( merge ))
+    resource_pool: small_z1
+    networks:
+      - name: redis1
+        static_ips: ~
+    persistent_disk: 0
+    properties:
+      redis:
+        master: (( merge ))
+        password: (( meta.password ))
+      network: redis1
+  - name: acceptance-tests
+    templates:
+      - name: acceptance-tests
+        release: redis
+    instances: 1
+    lifecycle: errand
+    resource_pool: small_z1
+    networks:
+      - name: redis1
+        static_ips: ~
+    properties:
+      redis:
+        master: (( merge ))
+        slave: (( merge ))
+        password: (( meta.password ))

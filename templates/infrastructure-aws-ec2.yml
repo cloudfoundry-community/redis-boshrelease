@@ -22,7 +22,6 @@ jobs:
         static_ips: ~
     persistent_disk: (( meta.persistent_disk ))
   - name: redis_z1
-    instances: (( meta.slaves ))
     networks:
       - name: redis1
         static_ips: ~
@@ -31,6 +30,22 @@ jobs:
       redis:
         master: (( "0.redis-leader-z1.redis1." meta.environment ".microbosh" ))
       network: redis1
+  - name: redis_test_slave_z1
+    networks:
+      - name: redis1
+        static_ips: ~
+    persistent_disk: (( meta.persistent_disk ))
+    properties:
+      redis:
+        master: (( "0.redis-leader-z1.redis1." meta.environment ".microbosh" ))
+      network: redis1
+  - name: acceptance-tests
+    networks:
+      - name: redis1
+    properties:
+      redis:
+        master: (( "0.redis-leader-z1.redis1." meta.environment ".microbosh" ))
+        slave: (( "0.redis-test-slave-z1.redis1." meta.environment ".microbosh" ))
 
 compilation:
   cloud_properties:

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/acceptance-tests/helpers/ctl_setup.sh 'acceptance-tests'
+
+EXITSTATUS=0
+
+PASSWORD_FLAG=""
+if [[ "${PASSWORD}X" != "X" ]]; then
+  PASSWORD_FLAG=" -a {PASSWORD}"
+fi
+
+redis-cli -h $MASTER -p ${PORT}${PASSWORD_FLAG} set rats running
+rats=$(redis-cli -h $MASTER -p ${PORT}${PASSWORD_FLAG} get rats)
+
+if [[ "${rats}" == "running" ]]; then
+  echo "Write/read to master - passed"
+else
+  echo "Write/read to master - failed"
+  EXITSTATUS=1
+fi
+
+rats=$(redis-cli -h $SLAVE -p ${PORT}${PASSWORD_FLAG} get rats)
+
+if [[ "${rats}" == "running" ]]; then
+  echo "Read from slave - passed"
+else
+  echo "Read from slave - failed"
+  EXITSTATUS=1
+fi
+
+exit $EXITSTATUS

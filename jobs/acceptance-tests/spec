@@ -1,0 +1,19 @@
+---
+name: acceptance-tests
+packages: [redis-server]
+templates:
+  bin/run: bin/run
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+  data/properties.sh.erb: data/properties.sh
+properties:
+  redis.port:
+    description: Port to listen for requests to redis server
+    default: 6379
+  redis.password:
+    description: Password to access redis server
+    default: "r3d!s"
+  redis.master:
+    description: IP address or hostname of the Redis master node
+  redis.slave:
+    description: IP address or hostname of a Redis slave node

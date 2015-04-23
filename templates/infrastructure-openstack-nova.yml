@@ -25,6 +25,13 @@ jobs:
       redis:
         master: (( "0.redis-leader-z1.redis1." meta.environment ".microbosh" ))
       network: redis1
+  - name: acceptance-tests
+    networks:
+      - name: redis1
+    properties:
+      redis:
+        master: (( "0.redis-leader-z1.redis1." meta.environment ".microbosh" ))
+        slave: (( "0.redis-test-slave-z1.redis1." meta.environment ".microbosh" ))
 
 compilation:
   cloud_properties:
