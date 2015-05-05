@@ -37,7 +37,7 @@ jobs:
       network: redis1
   - name: redis_test_slave_z1
     templates: (( meta.job_templates ))
-    instances: (( merge ))
+    instances: (( meta.test_slaves ))
     resource_pool: small_z1
     networks:
       - name: redis1
