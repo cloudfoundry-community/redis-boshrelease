@@ -39,7 +39,7 @@ if [[ $infrastructure = "aws-ec2" ]]; then
 fi
 
 if [[ $infrastructure = "openstack-nova" ]]; then
-  if [[ $DIRECTOR_CPI != "openstack" ]]; then
+  if ! [[ $DIRECTOR_CPI == "openstack"* ]]; then
     echo "Not targeting an OpenStack BOSH. Please use 'bosh target' before running this script."
     exit 1
   fi
