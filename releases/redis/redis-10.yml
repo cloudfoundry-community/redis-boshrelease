@@ -1,0 +1,20 @@
+---
+packages:
+- name: redis-server
+  version: b53d5357ab95a74c9489cd98a024e6ef6047aba0
+  fingerprint: b53d5357ab95a74c9489cd98a024e6ef6047aba0
+  sha1: 70ff266ab3d683932e1160150143c3b78627c942
+  dependencies: []
+jobs:
+- name: acceptance-tests
+  version: 79bafa3b8851fd0b6d5846474a4dd611efe81aa6
+  fingerprint: 79bafa3b8851fd0b6d5846474a4dd611efe81aa6
+  sha1: 7888706611413d5f9d734a89408bb979d9e5483e
+- name: redis
+  version: 7dfb986dbcd2ae12317aef431a829f7b119a3bec
+  fingerprint: 7dfb986dbcd2ae12317aef431a829f7b119a3bec
+  sha1: 424c68942479bd8e53fabbb5a3fb6f813c416143
+commit_hash: 4544687c
+uncommitted_changes: true
+name: redis
+version: '10'
