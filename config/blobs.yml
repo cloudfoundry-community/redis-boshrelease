@@ -1,6 +1,5 @@
 ---
 redis/redis-2.8.3.tar.gz:
-  object_id: 356f4b32-50a7-45b4-804e-099b3a84ea0e
-  sha: !binary |-
-    YTc1MTM3MWVlZWQ1ZjVmMDI5NjVlYjM0ZDk4OWMxOTYzZGQ4ZDhjNw==
+  object_id: a8c9d35f-3ce6-49df-9db8-40894448511a
+  sha: a751371eeed5f5f02965eb34d989c1963dd8d8c7
   size: 1046106
