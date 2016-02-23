@@ -169,6 +169,9 @@ slaveof <%= master %> <%= port %>
 # refuse the slave request.
 #
 # masterauth <master-password>
+<% if_p("redis.password") do |password| %>
+masterauth <%= password %>
+<% end %>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -258,6 +261,9 @@ slave-priority 100
 # use a very strong password otherwise it will be very easy to break.
 #
 # requirepass foobared
+<% if_p("redis.password") do |password| %>
+requirepass <%= password %>
+<% end %>
 
 # Command renaming.
 #
