@@ -170,7 +170,9 @@ slaveof <%= master %> <%= port %>
 #
 # masterauth <master-password>
 <% if_p("redis.password") do |password| %>
-masterauth <%= password %>
+  <% if p("redis.password").to_s != "" %>
+    masterauth <%= password %>
+  <% end %>
 <% end %>
 
 # When a slave loses its connection with the master, or when the replication
@@ -262,7 +264,9 @@ slave-priority 100
 #
 # requirepass foobared
 <% if_p("redis.password") do |password| %>
-requirepass <%= password %>
+  <% if p("redis.password").to_s != "" %>
+    requirepass <%= password %>
+  <% end %>
 <% end %>
 
 # Command renaming.
