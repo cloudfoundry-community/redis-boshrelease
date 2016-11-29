@@ -49,12 +49,12 @@ jobs:
 
 compilation:
   cloud_properties:
-    instance_type: m1.small
+    instance_type: t2.small
 
 resource_pools:
   - name: small_z1
     cloud_properties:
-      instance_type: m1.small
+      instance_type: t2.small
 
 networks:
   - name: floating
