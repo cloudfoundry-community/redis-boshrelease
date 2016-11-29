@@ -37,7 +37,7 @@ templates/make_manifest openstack-nova
 bosh -n deploy
 ```
 
-For AWS EC2, create a three-node clusterg:
+For AWS EC2, create a three-node cluster:
 
 ```
 templates/make_manifest aws-ec2
