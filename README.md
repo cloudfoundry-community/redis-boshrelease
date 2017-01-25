@@ -23,6 +23,16 @@ git clone https://github.com/cloudfoundry-community/redis-boshrelease.git
 cd redis-boshrelease
 ```
 
+Templates
+---------
+
+The `templates/make_manifest` uses [spiff](https://github.com/cloudfoundry-incubator/spiff), to install you can either download the binary release or add it through homebrew.
+
+```
+brew tap xoebus/cloudfoundry
+brew install spiff
+```
+
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a three-node cluster:
 
 ```
