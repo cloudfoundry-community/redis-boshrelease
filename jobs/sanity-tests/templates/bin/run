@@ -4,7 +4,7 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
 # Setup env vars and folders for the webapp_ctl script
-source /var/vcap/jobs/acceptance-tests/helpers/ctl_setup.sh 'acceptance-tests'
+source /var/vcap/jobs/sanity-tests/helpers/ctl_setup.sh 'sanity-tests'
 
 EXITSTATUS=0
 

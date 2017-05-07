@@ -13,6 +13,17 @@ instance_groups:
     release: redis
     properties:
       password: ((redis-password))
+- name: sanity-tests
+  azs: [z1]
+  instances: 1
+  lifecycle: errand
+  vm_type: default
+  stemcell: default
+  persistent_disk_type: default
+  networks: [{name: default}]
+  jobs:
+  - name: sanity-tests
+    release: redis
 
 variables:
 - name: redis-password
