@@ -3,7 +3,7 @@ name: redis
 instance_groups:
 - name: redis
   azs: [z1]
-  instances: 1
+  instances: 2
   vm_type: default
   stemcell: default
   persistent_disk_type: default
