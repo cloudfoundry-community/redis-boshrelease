@@ -160,7 +160,7 @@ dir "<%= p('base_dir') %>"
 # different interval, or to listen to another port, and so on.
 #
 <% unless spec.bootstrap -%>
-slaveof <%= link("redis").find {|redis| redis.bootstrap }.address %> <%= p("port") %>
+slaveof <%= link("redis").instances.find {|redis| redis.bootstrap }.address %> <%= p("port") %>
 <% end -%>
 
 # If the master is password protected (using the "requirepass" configuration
