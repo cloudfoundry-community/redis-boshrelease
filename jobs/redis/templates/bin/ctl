@@ -26,13 +26,13 @@ case $1 in
 
   reload)
     echo redis reloading...
-    $JOB_DIR/bin/redis_ctl stop
-    $JOB_DIR/bin/redis_ctl start
+    $JOB_DIR/bin/ctl stop
+    $JOB_DIR/bin/ctl start
 
     ;;
 
   *)
-    echo "Usage: redis_ctl {start|stop}"
+    echo "Usage: ctl {start|stop}"
 
     ;;
 

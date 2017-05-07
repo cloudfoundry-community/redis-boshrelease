@@ -2,7 +2,7 @@
 name: redis
 packages: [redis]
 templates:
-  bin/redis_ctl: bin/redis_ctl
+  bin/ctl: bin/ctl
   bin/health_check: bin/health_check
   bin/monit_debugger: bin/monit_debugger
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
