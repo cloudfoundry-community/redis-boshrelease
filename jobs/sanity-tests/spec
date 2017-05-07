@@ -5,7 +5,6 @@ templates:
   bin/run: bin/run
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
-  data/properties.sh.erb: data/properties.sh
 
 consumes:
 - name: redis
