@@ -16,6 +16,7 @@ provides:
   properties:
   - port
   - password
+  - base_dir
 
 consumes:
 - name: redis
@@ -27,6 +28,9 @@ properties:
     default: 6379
   password:
     description: Password to access redis server
+  base_dir:
+    description: Base dir for storing database files
+    default: /var/vcap/store/redis
 
   consul.service.name:
     description: Name for advertising/discovering this service over consul (defaults to deployment name)

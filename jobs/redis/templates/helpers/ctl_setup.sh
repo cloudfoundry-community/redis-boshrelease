@@ -34,7 +34,7 @@ done
 export RUN_DIR=/var/vcap/sys/run/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
-export STORE_DIR=/var/vcap/store/$JOB_NAME
+export STORE_DIR=<%= p("base_dir") %>
 for dir in $RUN_DIR $LOG_DIR $TMP_DIR $STORE_DIR
 do
   mkdir -p ${dir}
