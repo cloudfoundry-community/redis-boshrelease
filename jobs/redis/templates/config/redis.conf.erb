@@ -22,7 +22,7 @@ pidfile /var/vcap/sys/run/redis/redis.pid
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port <%= p("redis.port") %>
+port <%= p("port") %>
 
 # If you want you can bind a single interface, if the bind option is not
 # specified all the interfaces will listen for incoming connections.
@@ -159,21 +159,16 @@ dir /var/vcap/store/redis/
 # so for example it is possible to configure the slave to save the DB with a
 # different interval, or to listen to another port, and so on.
 #
-<% if_p("redis.master", "redis.port") do |master, port| %>
-slaveof <%= master %> <%= port %>
-<% end %>
+<% unless spec.bootstrap -%>
+slaveof <%= link("redis").find {|redis| redis.bootstrap }.address %> <%= p("port") %>
+<% end -%>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
 # starting the replication synchronization process, otherwise the master will
 # refuse the slave request.
 #
-# masterauth <master-password>
-<% if_p("redis.password") do |password| %>
-  <% if password.to_s != "" %>
-    masterauth <%= password.to_s %>
-  <% end %>
-<% end %>
+masterauth <%= p("password") %>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -262,12 +257,7 @@ slave-priority 100
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-# requirepass foobared
-<% if_p("redis.password") do |password| %>
-  <% if password.to_s != "" %>
-    requirepass <%= password.to_s %>
-  <% end %>
-<% end %>
+requirepass <%= p("password") %>
 
 # Command renaming.
 #

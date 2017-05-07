@@ -5,7 +5,9 @@ set -u # report the usage of uninitialized variables
 
 export JOB_DIR=/var/vcap/jobs/redis
 
-source $JOB_DIR/data/properties.sh
+# % disk full levels
+export DISK_CRITICAL_LEVEL=<%= p("health.disk.critical") %>
+export DISK_WARNING_LEVEL=<%= p("health.disk.warning") %>
 
 case $1 in
   disk)

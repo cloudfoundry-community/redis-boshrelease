@@ -6,20 +6,28 @@ templates:
   bin/redis_ctl: bin/redis_ctl
   bin/health_check: bin/health_check
   bin/monit_debugger: bin/monit_debugger
-  bin/initialize_kv: bin/initialize_kv
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/redis.conf.erb: config/redis.conf
+
+provides:
+- name: redis
+  type: redis
+  properties:
+  - port
+  - password
+
+consumes:
+- name: redis
+  type: redis
+
 properties:
-  redis.port:
+  port:
     description: Port to listen for requests to redis server
     default: 6379
-  redis.password:
+  password:
     description: Password to access redis server
-    default: "r3d!s"
-  redis.master:
-    description: IP address or hostname of the Redis master node
 
   consul.service.name:
     description: Name for advertising/discovering this service over consul (defaults to deployment name)
