@@ -3,8 +3,7 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-# Setup env vars and folders for the webapp_ctl script
-source /var/vcap/jobs/sanity-tests/helpers/ctl_setup.sh 'sanity-tests'
+export PATH=$PATH:/var/vcap/packages/redis/bin
 
 EXITSTATUS=0
 

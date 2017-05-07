@@ -3,8 +3,6 @@ name: sanity-tests
 packages: [redis]
 templates:
   bin/run: bin/run
-  helpers/ctl_setup.sh: helpers/ctl_setup.sh
-  helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
 consumes:
 - name: redis
