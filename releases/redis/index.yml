@@ -1,9 +1,10 @@
----
 builds:
   599915c2-24d8-4070-975d-be9f6ef77426:
-    version: '10'
+    version: "10"
   687caccc-ef36-4d5e-baeb-44c37cd59318:
-    version: '11'
+    version: "11"
+  aa458fd1-76a8-4a2e-5246-6a25e702a2a3:
+    version: 13.0.0
   f1a60b2c-810d-473e-ad5c-0d1dac514554:
-    version: '12'
-format-version: '2'
+    version: "12"
+format-version: "2"
