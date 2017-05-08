@@ -6,6 +6,6 @@ set -u # report the usage of uninitialized variables
 # $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
 export HOME=/var/vcap
 
-tar xfv redis/redis-2.8.3.tar.gz
-cd redis-2.8.3
+tar xfv redis/redis-*.tar.gz
+cd redis-*
 make PREFIX=${BOSH_INSTALL_TARGET} install
