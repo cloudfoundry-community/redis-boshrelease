@@ -43,4 +43,6 @@ stemcells:
 
 releases:
 - name: redis
-  version: latest
+  version: 13.0.0
+  url: https://github.com/cloudfoundry-community/redis-boshrelease/releases/download/v13.0.0/redis-13.0.0.tgz
+  sha1: 7cc104e398c7c7dc74841343e1a6b689927f7d99
