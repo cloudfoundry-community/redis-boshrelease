@@ -6,7 +6,7 @@ instance_groups:
   instances: 2
   vm_type: default
   stemcell: default
-  persistent_disk_type: default
+  persistent_disk_type: 1GB
   networks: [{name: default}]
   jobs:
   - name: redis
@@ -19,7 +19,6 @@ instance_groups:
   lifecycle: errand
   vm_type: default
   stemcell: default
-  persistent_disk_type: default
   networks: [{name: default}]
   jobs:
   - name: sanity-tests
