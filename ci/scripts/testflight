@@ -43,7 +43,7 @@ header "Choosing cloud-config options"
 vm_type=$(bosh2 int <(bosh2 cloud-config) --path /vm_types/0/name)
 disk_type=$(bosh2 int <(bosh2 cloud-config) --path /disk_types/0/name)
 network=$(bosh2 int <(bosh2 cloud-config) --path /networks/0/name)
-ig_name=gogs
+ig_name=${ig_name:-$release_name}
 
 mkdir -p tmp
 
@@ -52,6 +52,12 @@ cat > tmp/deployment.yml <<YAML
 - type: replace
   path: /name
   value: ${BOSH_DEPLOYMENT}
+
+- type: replace
+  path: /releases/name=${release_name}
+  value:
+    name: ${release_name}
+    version: latest
 
 - type: replace
   path: /instance_groups/name=${ig_name}/vm_type
@@ -77,7 +83,6 @@ done
 
 set -x
 bosh2 int ${MANIFEST_PATH} \
-  -o manifests/operators/dev.yml  \
   -o tmp/deployment.yml    \
   ${op_patch_files_flags}            \
   --vars-store tmp/creds.yml \
