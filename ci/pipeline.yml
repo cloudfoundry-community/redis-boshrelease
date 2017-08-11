@@ -233,7 +233,7 @@ jobs:
             REPO_OUT:     pushme
             BRANCH:       (( grab meta.github.branch ))
             GITHUB_OWNER: (( grab meta.github.owner ))
-            MANIFEST_PATH: manifests/gogs.yml
+            MANIFEST_PATH: (( concat "manifests/" meta.name ".yml" ))
 
             AWS_ACCESS_KEY:       (( grab meta.aws.access_key ))
             AWS_SECRET_KEY:       (( grab meta.aws.secret_key ))
