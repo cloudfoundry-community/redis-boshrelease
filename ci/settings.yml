@@ -1,0 +1,103 @@
+---
+meta:
+  name:    redis
+  target:  sw
+  url:     https://ci.starkandwayne.com
+  test-errand: sanity-tests
+
+  initial_version: 13.1.0
+
+  bosh-lite:
+    target: https://10.58.111.49:25555
+    username: (( vault "secret/bosh-lites/lite49/users/admin:username" ))
+    password: (( vault "secret/bosh-lites/lite49/users/admin:password" ))
+    cacert:   (( vault "secret/bosh-lites/lite49/certs:rootCA.pem" ))
+
+  aws:
+    access_key: (( vault "secret/aws/cfcommunity:access" ))
+    secret_key: (( vault "secret/aws/cfcommunity:secret" ))
+
+  github:
+    owner:  cloudfoundry-community
+    repo:   (( concat meta.name "-boshrelease" ))
+    branch: master
+    private_key:  (( vault "secret/pipelines/shared/github:private_key" ))
+    access_token: (( vault "secret/pipelines/shared/github:access_token" ))
+
+  slack:
+    webhook: "not-implemented"
+    # webhook: (( vault "secret/pipelines/redis-boshrelease/slack:webhook" ))
+    channel: '#redis'
+    blob_success:  '(( concat "$BUILD_PIPELINE_NAME: New version of $BUILD_JOB_NAME was detected, and updated in master. <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME| Cut a new release?>" ))'
+    blob_failure:  '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update the blob for $BUILD_JOB_NAME>" ))'
+
+groups:
+- name: blobs
+  jobs:
+  - redis
+
+jobs:
+- name: redis
+  public: true
+  plan:
+  - aggregate:
+    - { get: git }
+    - { get: redis, trigger: true, params: { globs: [linux_amd64.tar.gz] }}
+  - task: update-redis
+    config:
+      image_resource:
+        type: docker-image
+        source:
+          repository: (( grab meta.image ))
+      platform: linux
+      inputs:
+      - name: git
+      - name: redis
+      outputs:
+      - name: pushme
+      run:
+        path: ./git/ci/scripts/update-blob
+      params:
+        REPO_ROOT:   git
+        REPO_OUT:    pushme
+        BLOB_DIR:    redis
+        BLOB_NAME:   redis
+        BLOB_BINARY: linux_amd64.tar.gz
+        BLOB_URL:    https://github.com/gogits/redis
+        BLOB_DESTINATION: redis/redis_linux_amd64.tar.gz
+        AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
+        AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
+        BRANCH:         (( grab meta.github.branch ))
+    on_failure:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_failure ))
+  - put: git
+    params:
+      rebase: true
+      repository: pushme/git
+    on_success:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_success ))
+    on_failure:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_failure ))
+
+resources:
+  - name: redis
+    type: github-release
+    source:
+      user:         gogits
+      repository:   redis
+      access_token: (( grab meta.github.access_token ))
