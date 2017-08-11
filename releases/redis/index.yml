@@ -5,6 +5,8 @@ builds:
     version: "11"
   aa458fd1-76a8-4a2e-5246-6a25e702a2a3:
     version: 13.0.0
+  c7041b95-0b67-47d4-6127-37ae00f75ca5:
+    version: 13.1.1
   f1a60b2c-810d-473e-ad5c-0d1dac514554:
     version: "12"
 format-version: "2"
