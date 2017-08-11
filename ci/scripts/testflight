@@ -92,6 +92,12 @@ bosh2 int ${MANIFEST_PATH} \
 
 bosh2 -n deploy tmp/manifest.yml
 
+if [[ ! -z $TEST_ERRAND ]]; then
+	bosh2 run-errand "$TEST_ERRAND"
+else
+	echo "No test errand specified, skipping."
+fi
+
 echo
 echo "SUCCESS"
 exit 0
