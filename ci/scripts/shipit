@@ -5,7 +5,7 @@
 # Script for generating Github release / tag assets
 # and managing release notes for a BOSH Release pipeline
 #
-# author:  James Hunt <james@niftylogic.com>, Dr Nic Williams <drnicwilliams@gmail.com>
+# author:  James Hunt <james@niftylogic.com>
 # created: 2016-03-30
 
 set -eu

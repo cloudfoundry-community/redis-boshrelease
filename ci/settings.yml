@@ -14,6 +14,7 @@ meta:
     cacert:   (( vault "secret/bosh-lites/lite49/certs:rootCA.pem" ))
 
   aws:
+    bucket: redis-boshrelease
     access_key: (( vault "secret/aws/cfcommunity:access" ))
     secret_key: (( vault "secret/aws/cfcommunity:secret" ))
 

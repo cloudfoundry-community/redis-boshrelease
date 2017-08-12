@@ -2,9 +2,9 @@
 #
 # ci/scripts/testflight
 #
-# Script for testing a BOSH release using `bosh2`
+# Script for testing a BOSH release using bosh2
 #
-# author:  James Hunt <james@niftylogic.com>, Dr Nic Williams <drnicwilliams@gmail.com>
+# author:  James Hunt <james@niftylogic.com>
 
 header() {
 	echo
@@ -29,6 +29,24 @@ cd ${REPO_ROOT:?required}
 header "Pulling in any git submodules..."
 git submodule update --init --recursive --force
 
+if [[ ! -f ${MANIFEST_PATH} ]]; then
+	echo "Deployment manifest ${MANIFEST_PATH} does not exist"
+	exit 1
+fi
+
+header "Confirming that \$MANIFEST_VARS is valid"
+mkdir -p tmp
+
+# $MANIFEST_VARS can either be "key: value" or "key=value"
+# and will be converted to "key: value" YAML
+echo "${MANIFEST_VARS:-"{} ---"}" | sed -e "s/ *= */: /g" > tmp/vars.yml
+if [[ ! -z $DEBUG ]]; then
+	echo "Variables passed to deployment manifest:"
+	cat tmp/vars.yml
+fi
+# convert YAML to JSON to check YAML validity
+spruce json tmp/vars.yml > /dev/null
+
 header "Cleaning up from any previous deployments..."
 bosh2 -n delete-deployment
 
@@ -43,9 +61,6 @@ header "Choosing cloud-config options"
 vm_type=$(bosh2 int <(bosh2 cloud-config) --path /vm_types/0/name)
 disk_type=$(bosh2 int <(bosh2 cloud-config) --path /disk_types/0/name)
 network=$(bosh2 int <(bosh2 cloud-config) --path /networks/0/name)
-ig_name=${ig_name:-$release_name}
-
-mkdir -p tmp
 
 cat > tmp/deployment.yml <<YAML
 ---
@@ -58,23 +73,23 @@ cat > tmp/deployment.yml <<YAML
   value:
     name: ${release_name}
     version: latest
+YAML
 
+for ig_name in $(spruce json ${MANIFEST_PATH} | jq -r ".instance_groups[].name"); do
+cat >> tmp/deployment.yml <<YAML
 - type: replace
   path: /instance_groups/name=${ig_name}/vm_type
   value: ${vm_type}
 
 - type: replace
-  path: /instance_groups/name=${ig_name}/persistent_disk_type
+  path: /instance_groups/name=${ig_name}/persistent_disk_type?
   value: ${disk_type}
 
 - type: replace
   path: /instance_groups/name=${ig_name}/networks
   value: [{name: ${vm_type}}]
 YAML
-
-cat > tmp/vars.yml <<YAML
---- {}
-YAML
+done
 
 op_patch_files_flags=""
 for op_patch_file in ${op_patch_files//,/ } ; do
@@ -82,6 +97,7 @@ for op_patch_file in ${op_patch_files//,/ } ; do
 done
 
 set -x
+
 bosh2 int ${MANIFEST_PATH} \
   -o tmp/deployment.yml    \
   ${op_patch_files_flags}            \
