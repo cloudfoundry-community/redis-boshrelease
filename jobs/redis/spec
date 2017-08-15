@@ -35,7 +35,7 @@ properties:
       - 900 1
       - 300 10
       - 60 10000
-    description: save <seconds> <changes>; save points to the rdb snapshot either after #<seconds> seconds have passed or #<changes> changes have occurred
+    description: save <seconds> <changes>; save points to the rdb snapshot after #<seconds> seconds have passed if at least #<changes> key changes have occurred
 
   consul.service.name:
     description: Name for advertising/discovering this service over consul (defaults to deployment name)
