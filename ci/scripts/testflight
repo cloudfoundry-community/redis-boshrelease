@@ -29,12 +29,15 @@ cd ${REPO_ROOT:?required}
 header "Pulling in any git submodules..."
 git submodule update --init --recursive --force
 
+header "Confirming testflight inputs"
+
+echo "Confirming deployment manifest ${MANIFEST_PATH} exists"
 if [[ ! -f ${MANIFEST_PATH} ]]; then
 	echo "Deployment manifest ${MANIFEST_PATH} does not exist"
 	exit 1
 fi
 
-header "Confirming that \$MANIFEST_VARS is valid"
+echo "Confirming that \$MANIFEST_VARS is valid"
 mkdir -p tmp
 
 # $MANIFEST_VARS can either be "key: value" or "key=value"
@@ -46,6 +49,19 @@ if [[ ! -z $DEBUG ]]; then
 fi
 # convert YAML to JSON to check YAML validity
 spruce json tmp/vars.yml > /dev/null
+
+echo "Confirming each operator file exists: ${MANIFEST_OP_PATHS:-ok, none specified.}"
+op_patch_file_errors=
+for op_patch_file in ${MANIFEST_OP_PATHS//,/ } ; do
+	if [[ ! -f $op_patch_file ]]; then
+		op_patch_file_errors=1
+		echo "Operator file missing: ${op_patch_file}"
+	fi
+done
+if [[ ! -z ${op_patch_file_errors} ]]; then
+	exit 1
+fi
+
 
 header "Cleaning up from any previous deployments..."
 bosh2 -n delete-deployment
@@ -92,7 +108,7 @@ YAML
 done
 
 op_patch_files_flags=""
-for op_patch_file in ${op_patch_files//,/ } ; do
+for op_patch_file in ${MANIFEST_OP_PATHS//,/ } ; do
    op_patch_files_flags="${op_patch_files_flags} -o $op_patch_file"
 done
 

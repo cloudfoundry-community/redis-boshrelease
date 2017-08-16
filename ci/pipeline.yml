@@ -18,7 +18,9 @@ meta:
   url:      (( param "Please specify the full url of the target Concourse CI" ))
   pipeline: (( concat meta.name "-boshrelease" ))
   manifest:
+    path:   (( concat "manifests/" meta.name ".yml" ))
     vars:   "--- {}"
+    operator_file_paths: "" # comma separated list relative to repo root
 
   image:
     name: starkandwayne/concourse
@@ -94,8 +96,9 @@ jobs:
             BOSH_CLIENT_SECRET:   (( grab meta.bosh-lite.password ))
             BOSH_DEPLOYMENT:      (( grab meta.bosh-lite.deployment ))
             TEST_ERRAND:          (( grab meta.test-errand || ~ ))
-            MANIFEST_PATH:        (( concat "manifests/" meta.name ".yml" ))
+            MANIFEST_PATH:        (( grab meta.manifest.path ))
             MANIFEST_VARS:        (( grab meta.manifest.vars ))
+            MANIFEST_OP_PATHS:    (( grab meta.manifest.operator_file_paths ))
       on_failure:
         put: notify
         params:
@@ -135,8 +138,9 @@ jobs:
             BOSH_CLIENT_SECRET:   (( grab meta.bosh-lite.password ))
             BOSH_DEPLOYMENT:      (( grab meta.bosh-lite.deployment-pr ))
             TEST_ERRAND:          (( grab meta.test-errand || ~ ))
-            MANIFEST_PATH:        (( concat "manifests/" meta.name ".yml" ))
+            MANIFEST_PATH:        (( grab meta.manifest.path ))
             MANIFEST_VARS:        (( grab meta.manifest.vars ))
+            MANIFEST_OP_PATHS:    (( grab meta.manifest.operator_file_paths ))
         on_success:
           put: git-pull-requests
           params:
