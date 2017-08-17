@@ -105,8 +105,7 @@ databases 16
 #
 #   save ""
 
-<% if_p('redis_save_intervals') do
-    redis_save_intervals = p('redis_save_intervals')
+<% if_p('redis_save_intervals') do |redis_save_intervals|
 
     if redis_save_intervals.length > 0
         redis_save_intervals.each do | command |
