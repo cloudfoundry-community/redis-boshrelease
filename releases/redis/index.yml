@@ -1,4 +1,6 @@
 builds:
+  50de89b1-f32b-457a-672f-e4e1dfe2209d:
+    version: 13.1.2
   599915c2-24d8-4070-975d-be9f6ef77426:
     version: "10"
   687caccc-ef36-4d5e-baeb-44c37cd59318:
