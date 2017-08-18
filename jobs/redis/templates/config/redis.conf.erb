@@ -105,18 +105,15 @@ databases 16
 #
 #   save ""
 
-<% if_p('redis_save_intervals') do |redis_save_intervals|
-
-    if redis_save_intervals.length > 0
-        redis_save_intervals.each do | command |
-          %>save <%= command %>
-    <%
-        end
-   else
-       %>save ""<%
-   end
-end
-%>
+<% if_p('redis_save_intervals') do |redis_save_intervals| -%>
+<% if redis_save_intervals.length > 0 -%>
+<% redis_save_intervals.each do | command | -%>
+save <%= command %>
+<% end -%>
+<% else -%>
+save ""
+<% end -%>
+<% end -%>
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
