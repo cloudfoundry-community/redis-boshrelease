@@ -6,7 +6,7 @@ instance_groups:
   instances: 2
   vm_type: default
   stemcell: default
-  persistent_disk_type: 1GB
+  persistent_disk: 10240
   networks: [{name: default}]
   jobs:
   - name: redis
