@@ -277,7 +277,7 @@ jobs:
           rebase: true
           repository: pushme/git
       - name: tarball
-        put: s3
+        put: s3-tarball
         params:
           file:  (( concat "gh/artifacts/" meta.name "-*.tgz" ))
       - name: github-release
@@ -357,7 +357,7 @@ resources:
       repository:   (( grab meta.github.repo ))
       access_token: (( grab meta.github.access_token ))
 
-  - name: s3
+  - name: s3-tarball
     type: s3
     source:
       bucket:            (( grab meta.aws.bucket ))

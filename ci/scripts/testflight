@@ -113,12 +113,19 @@ cat >> tmp/deployment.yml <<YAML
   value: ${vm_type}
 
 - type: replace
-  path: /instance_groups/name=${ig_name}/persistent_disk_type?
-  value: ${disk_type}
-
-- type: replace
   path: /instance_groups/name=${ig_name}/networks
   value: [{name: ${network}}]
+
+YAML
+done
+
+instance_groups_with_persistent_disk_types=$(spruce json $MANIFEST_PATH | jq -r ".instance_groups[] | select(.persistent_disk_type).name")
+for ig_name in $instance_groups_with_persistent_disk_types; do
+	cat >> tmp/deployment.yml <<YAML
+- type: replace
+  path: /instance_groups/name=${ig_name}/persistent_disk_type
+  value: ${disk_type}
+
 YAML
 done
 
