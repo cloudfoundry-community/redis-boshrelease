@@ -20,3 +20,5 @@ git clone https://github.com/cloudfoundry-community/redis-boshrelease.git
 cd redis-boshrelease
 bosh2 deploy manifests/redis.yml
 ```
+
+If your BOSH does not have Credhub/Config Server, then remember `--vars-store` to allow generation of passwords and certificates.
