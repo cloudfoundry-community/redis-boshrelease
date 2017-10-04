@@ -23,6 +23,10 @@ bosh2 deploy manifests/redis.yml
 
 If your BOSH does not have Credhub/Config Server, then remember `--vars-store` to allow generation of passwords and certificates.
 
+```
+bosh2 deploy manifests/redis.yml --vars-store creds.yml
+```
+
 If you have any errors about `Instance group 'redis' references an unknown vm type 'default'` or similar, there is a helper script to select a `vm_type` and `network` from your Cloud Config:
 
 ```

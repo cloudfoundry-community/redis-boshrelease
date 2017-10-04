@@ -17,3 +17,4 @@ blobs/*
 Gemfile.lock
 local*yml
 tmp
+creds.yml
