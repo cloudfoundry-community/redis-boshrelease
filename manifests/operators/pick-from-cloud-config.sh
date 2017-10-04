@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# The base manifests/redis.yml assumes that your `bosh cloud-config` contains
+# "vm_type" and "networks" named "default". Its quite possible you don't have this.
+# This script will select the first "vm_types" and first "networks" to use in
+# your deployment. It will print to stderr the choices it made.
+#
+# Usage:
+#   bosh deploy manifests/redis.yml -o <(./manifests/operators/pick-from-cloud-config.sh)
+
 : ${BOSH_ENVIRONMENT:?required}
 
 cloud_config=$(bosh cloud-config)
