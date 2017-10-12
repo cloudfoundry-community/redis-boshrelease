@@ -1,0 +1,5 @@
+processes:
+  redis:
+    executable: /var/vcap/packages/bin/redis-server
+    args:
+    - /var/vcap/jobs/redis/config/redis.conf

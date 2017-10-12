@@ -1,5 +1,11 @@
 name: redis
 
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
+
 instance_groups:
 - name: redis
   azs: [z1]
@@ -41,6 +47,9 @@ stemcells:
   version: latest
 
 releases:
+- name: bpm
+  version: 0.2.0
+  url: git+https://github.com/cloudfoundry-incubator/bpm-release
 - name: redis
   version: 13.1.2
   url: https://github.com/cloudfoundry-community/redis-boshrelease/releases/download/v13.1.2/redis-13.1.2.tgz

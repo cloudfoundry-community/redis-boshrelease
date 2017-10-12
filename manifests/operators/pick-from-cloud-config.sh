@@ -15,6 +15,10 @@ cd $DIR/../..
 
 instance_groups=$(bosh int <(cat manifests/*.yml) --path /instance_groups | grep "^  name:" | awk '{print $2}' | sort | uniq)
 cloud_config=$(bosh cloud-config)
+if [[ -z ${cloud_config} ]]; then
+  echo "BOSH env missing a cloud-config"
+  exit 1
+fi
 vm_type=$(bosh int <(echo "$cloud_config") --path /vm_types/0/name)
 network=$(bosh int <(echo "$cloud_config") --path /networks/0/name)
 
