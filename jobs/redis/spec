@@ -4,7 +4,6 @@ packages: [redis]
 templates:
   config/bpm.yml: config/bpm.yml
   config/redis.conf.erb: config/redis.conf
-  bin/pre-start: bin/pre-start
   bin/health_check: bin/health_check
 
 provides:
