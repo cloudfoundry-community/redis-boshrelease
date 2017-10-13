@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mkdir -p /var/vcap/store/redis
+chown vcap:vcap -R /var/vcap/store/redis
