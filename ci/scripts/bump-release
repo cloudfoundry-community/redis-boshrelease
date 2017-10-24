@@ -64,6 +64,11 @@ cd ${REPO_OUT}
 for manifest_path in $(ls manifests/*.yml); do
   bump_bpm_manifest $manifest_path
 done
+
+cat <<EOF >>ci/release_notes.md
+* Bumped ${NAME} to v${version}
+EOF
+
 git merge --no-edit ${BRANCH}
 git add -A
 git status
