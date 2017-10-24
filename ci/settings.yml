@@ -65,6 +65,18 @@ jobs:
         REPO_OUT:  pushme
         RELEASE:   bpm-release
         NAME:      bpm
+  - name: upload-git
+    put: git
+    params:
+      rebase: true
+      repository: pushme
+    on_success:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_success ))
 
 resources:
   - name: bpm-release
