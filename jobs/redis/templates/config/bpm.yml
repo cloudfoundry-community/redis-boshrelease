@@ -1,0 +1,8 @@
+---
+processes:
+- name: redis
+  executable: /var/vcap/packages/redis/bin/redis-server
+  args:
+  - /var/vcap/jobs/redis/config/redis.conf
+  ephemeral_disk: true
+  persistent_disk: true

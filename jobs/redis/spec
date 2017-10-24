@@ -2,12 +2,9 @@
 name: redis
 packages: [redis]
 templates:
-  bin/ctl: bin/ctl
-  bin/health_check: bin/health_check
-  bin/monit_debugger: bin/monit_debugger
-  helpers/ctl_setup.sh: helpers/ctl_setup.sh
-  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+  config/bpm.yml: config/bpm.yml
   config/redis.conf.erb: config/redis.conf
+  bin/health_check: bin/health_check
 
 provides:
 - name: redis

@@ -1,0 +1,5 @@
+- type: replace
+  path: /releases/name=redis
+  value:
+    name: redis
+    version: latest
