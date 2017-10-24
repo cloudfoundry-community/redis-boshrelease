@@ -59,11 +59,12 @@ jobs:
       outputs:
       - name: pushme
       run:
-        path: ./git/ci/scripts/bump-bpm
+        path: ./git/ci/scripts/bump-release
       params:
         REPO_ROOT: git
         REPO_OUT:  pushme
         RELEASE:   bpm-release
+        NAME:      bpm
 
 resources:
   - name: bpm-release
