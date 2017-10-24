@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -e
+
+: ${REPO_ROOT:?required}
+: ${REPO_OUT:?required}
+: ${RELEASE:?required}
+
+if [[ ! -f ${RELEASE}/version ]]; then
+  echo "Director ${RELEASE} must have file /version"
+  exit 1
+fi
+
+git clone ${REPO_ROOT} ${REPO_OUT}
+
+name=$(cat ${RELEASE}/name)
+version=$(cat ${RELEASE}/version)
+sha1=$(cat ${RELEASE}/sha1)
+
+function bump_bpm_manifest {
+  manifest_path=$1
+  releases_updated=$(spruce merge <<YAML
+releases: $(spruce json manifests/redis.yml| jq --arg version $version --arg sha1 $sha1 '.releases | map(
+    if .name == "bpm"
+    then . + {"version":$version,"sha1":$sha1}
+    else .
+    end)'
+)
+YAML
+)
+  releases_line_number=$(awk '/^releases:/{ print NR; exit }' $manifest_path)
+  manifest_len=$(wc -l $manifest_path | awk '{print $1}')
+  manifest_head=$(head -n `expr $releases_line_number - 1` $manifest_path)
+  cat > $manifest_path <<YAML
+${manifest_head}
+
+${releases_updated}
+YAML
+}
+
+if [[ -z $(git config --global user.email) ]]; then
+  git config --global user.email "ci@starkandwayne.com"
+fi
+if [[ -z $(git config --global user.name) ]]; then
+  git config --global user.name "CI Bot"
+fi
+
+cd ${REPO_OUT}
+for manifest_path in $(ls manifests/*.yml); do
+  bump_bpm_manifest $manifest_path
+done
+git merge --no-edit ${BRANCH}
+git add -A
+git status
+git commit -m "bump bpm v${version}"

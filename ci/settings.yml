@@ -32,3 +32,41 @@ meta:
     icon:          https://www.starkandwayne.com/assets/images/shield-blue-50x50.png
     blob_success:  '(( concat "$BUILD_PIPELINE_NAME: New version of $BUILD_JOB_NAME was detected, and updated in master. <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME| Cut a new release?>" ))'
     blob_failure:  '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update the blob for $BUILD_JOB_NAME>" ))'
+
+groups:
+- name: bpm
+  jobs:
+  - bpm-release
+
+jobs:
+- name: bpm-release
+  public: true
+  plan:
+  - aggregate:
+    - { get: git }
+    - { get: bpm-release, trigger: true, params: { tarball: false }}
+  - task: bump-bpm
+    config:
+      image_resource:
+        type: docker-image
+        source:
+          repository: (( grab meta.image.name ))
+          tag:        (( grab meta.image.tag ))
+      platform: linux
+      inputs:
+      - name: git
+      - name: bpm-release
+      outputs:
+      - name: pushme
+      run:
+        path: ./git/ci/scripts/bump-bpm
+      params:
+        REPO_ROOT: git
+        REPO_OUT:  pushme
+        RELEASE:   bpm-release
+
+resources:
+  - name: bpm-release
+    type: bosh-io-release
+    source:
+      repository: cloudfoundry-incubator/bpm-release
