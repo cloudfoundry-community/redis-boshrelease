@@ -26,6 +26,8 @@ header() {
 : ${VERSION_FROM:?required}
 : ${AWS_ACCESS_KEY:?required}
 : ${AWS_SECRET_KEY:?required}
+: ${GIT_EMAIL:?required}
+: ${GIT_NAME:?required}
 
 if [[ ! -f ${VERSION_FROM} ]]; then
   echo >&2 "Version file (${VERSION_FROM}) not found.  Did you misconfigure Concourse?"
@@ -94,10 +96,10 @@ EOF
 
 header "Update git repo with final release..."
 if [[ -z $(git config --global user.email) ]]; then
-  git config --global user.email "ci@starkandwayne.com"
+  git config --global user.email "${GIT_EMAIL}"
 fi
 if [[ -z $(git config --global user.name) ]]; then
-  git config --global user.name "CI Bot"
+  git config --global user.name "${GIT_NAME}"
 fi
 
 (cd ${REPO_ROOT}
