@@ -170,7 +170,11 @@ slaveof <%= link("redis").instances.find {|redis| redis.bootstrap }.address %> <
 # starting the replication synchronization process, otherwise the master will
 # refuse the slave request.
 #
-masterauth <%= p("password") %>
+<% if_p("password") do |password| %>
+  <% if password.to_s != "" %>
+    masterauth <%= p("password") %>
+  <% end %>
+<% end %>
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -259,7 +263,11 @@ slave-priority 100
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-requirepass <%= p("password") %>
+<% if_p("password") do |password| %>
+  <% if password.to_s != "" %>
+    requirepass <%= p("password") %>
+  <% end %>
+<% end %>
 
 # Command renaming.
 #
