@@ -71,6 +71,8 @@ jobs:
         REPO_OUT:  pushme
         RELEASE:   bpm-release
         NAME:      bpm
+        GIT_EMAIL: (( grab meta.git.email ))
+        GIT_NAME:  (( grab meta.git.name ))
   - name: upload-git
     put: git
     params:
