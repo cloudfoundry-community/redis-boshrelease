@@ -50,8 +50,8 @@ releases:
 - name: bpm
   sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
   url: git+https://github.com/cloudfoundry-incubator/bpm-release
-  version: 0.2.0
+  version: 0.5.0
 - name: redis
-  version: 14.0.1
-  url: https://github.com/cloudfoundry-community/redis-boshrelease/releases/download/v14.0.1/redis-14.0.1.tgz
   sha1: fd4a6107e1fb8aca1d551054d8bc07e4f53ddf05
+  url: https://github.com/cloudfoundry-community/redis-boshrelease/releases/download/v14.0.1/redis-14.0.1.tgz
+  version: 14.0.1
