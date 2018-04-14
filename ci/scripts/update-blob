@@ -7,8 +7,6 @@ set -e
 : ${BLOB_BINARY:?required}
 : ${BLOB_CLEANUP:?required}
 : ${BLOB_DESTINATION:?required}
-: ${GIT_EMAIL:?required}
-: ${GIT_NAME:?required}
 
 VERSION=$(cat ${BLOB_DIR}/version)
 
@@ -46,10 +44,10 @@ EOF
 
   # GIT!
   if [[ -z $(git config --global user.email) ]]; then
-    git config --global user.email "${GIT_EMAIL}"
+    git config --global user.email "ci@starkandwayne.com"
   fi
   if [[ -z $(git config --global user.name) ]]; then
-    git config --global user.name "${GIT_NAME}"
+    git config --global user.name "CI Bot"
   fi
 
   (cd ${REPO_ROOT}

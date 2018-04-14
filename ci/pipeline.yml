@@ -60,7 +60,7 @@ meta:
     upset_moji:    ":sad_panda:"
     channel:       (( param "Please specify the channel (#name) or user (@user) to send messages to" ))
     username:      concourse
-    icon:          http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+    icon:          https://cl.ly/2F421Y300u07/concourse-logo-blue-transparent.png
     fail_url: '(( concat "<" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Concourse Failure! " meta.slack.upset_moji ">" ))'
 
 groups:
@@ -70,8 +70,13 @@ groups:
       - testflight-pr
       - rc
       - shipit
+      - compile-release-3541
+      - use-compiled-releases
+  - name: versioning
+    jobs:
       - major
       - minor
+      - patch
 
 jobs:
   - name: testflight
@@ -205,11 +210,41 @@ jobs:
 
   - name: rc
     public: true
+    serial: true
     plan:
     - do:
       - aggregate:
           - { get: git,     trigger: true,  passed: [testflight] }
           - { get: version, trigger: true, params: {pre: rc} }
+      - task: release-notes
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          inputs:
+              - { name: git }
+          run:
+            path: sh
+            args:
+            - -ce
+            - |
+              cd git
+              if [ -f ci/release_notes.md ]; then
+                echo "######   RELEASE NOTES   ###############"
+                echo
+                cat ci/release_notes.md
+                echo
+                echo "########################################"
+                echo
+              else
+                echo "NO RELEASE NOTES HAVE BEEN WRITTEN"
+                echo "You *might* want to do that before"
+                echo "hitting (+) on that shipit job..."
+                echo
+              fi
       - put: version
         params: {file: version/number}
       on_failure:
@@ -233,6 +268,20 @@ jobs:
           username: (( grab meta.slack.username ))
           icon_url: (( grab meta.slack.icon ))
           text:    '(( concat meta.slack.fail_url " " meta.pipeline ": minor job failed" ))'
+
+  - name: patch
+    public: true
+    plan:
+    - do:
+      - { get: version, trigger: false, params: {bump: patch} }
+      - { put: version,                 params: {file: version/number} }
+      on_failure:
+        put: notify
+        params:
+          channel:  (( grab meta.slack.channel ))
+          username: (( grab meta.slack.username ))
+          icon_url: (( grab meta.slack.icon ))
+          text:    '(( concat meta.slack.fail_url " " meta.pipeline ": patch job failed" ))'
 
   - name: major
     public: true
@@ -293,7 +342,7 @@ jobs:
         put: git
         params:
           rebase: true
-          repository: pushme/git
+          repository: pushme
       - name: tarball
         put: s3-tarball
         params:
@@ -325,6 +374,84 @@ jobs:
           icon_url: (( grab meta.slack.icon ))
           text:    '(( concat meta.slack.fail_url " " meta.pipeline ": shipit job failed" ))'
 
+  - name: compile-release-3541
+    plan:
+      - aggregate:
+        - get: git
+        - get: github
+          trigger: true
+        - get: ubuntu-trusty-stemcell-3541
+          params: {tarball: false}
+      - task: export-release
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          inputs:
+            - name: git
+            - name: ubuntu-trusty-stemcell-3541
+              path: stemcell
+            - name: github
+              path: release
+          outputs:
+            - name: compiled-release
+          run:
+            path: git/ci/scripts/export-release
+          params:
+            BOSH_ENVIRONMENT:     (( grab meta.bosh-lite.target ))
+            BOSH_CA_CERT:         (( grab meta.bosh-lite.cacert ))
+            BOSH_CLIENT:          (( grab meta.bosh-lite.username ))
+            BOSH_CLIENT_SECRET:   (( grab meta.bosh-lite.password ))
+      - put: compiled-releases
+        params:
+          file: "compiled-release/compiled-releases/*.tgz"
+
+  - name: use-compiled-releases
+    plan:
+      - aggregate:
+        - get: git
+        - get: github
+          passed: [compile-release-3541]
+          trigger: true
+        - get: ubuntu-trusty-stemcell-3541
+          passed: [compile-release-3541]
+          params: {tarball: false}
+        - get: compiled-releases
+          passed: [compile-release-3541]
+      - task: use-compiled-releases
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          inputs:
+            - name: git
+            - name: ubuntu-trusty-stemcell-3541
+              path: stemcell
+            - name: github
+              path: release
+            - name: compiled-releases
+          outputs:
+            - name: pushme
+          run:
+            path: git/ci/scripts/use-compiled-releases
+          params:
+            REPO_ROOT: git
+            REPO_OUT:  pushme
+            GIT_EMAIL: (( grab meta.git.email ))
+            GIT_NAME:  (( grab meta.git.name ))
+            BRANCH:    (( grab meta.github.branch ))
+      - name: upload-git
+        put: git
+        params:
+          rebase: true
+          repository: pushme
+
 resource_types:
   - name: slack-notification
     type: docker-image
@@ -346,6 +473,7 @@ resources:
 
   - name: git-pull-requests
     type: pull-request
+    check_every: 15m # Required due to API throttling.
     source:
       access_token: (( grab meta.github.access_token ))
       private_key:  (( grab meta.github.private_key ))
@@ -383,3 +511,18 @@ resources:
       regexp:            (( concat meta.name "-(.*).tgz" ))
       access_key_id:     (( grab meta.aws.access_key ))
       secret_access_key: (( grab meta.aws.secret_key ))
+
+  - name: ubuntu-trusty-stemcell-3541
+    type: bosh-io-stemcell
+    source:
+      name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+      version_family: 3541.latest
+
+  - name: compiled-releases
+    type: s3
+    source:
+      bucket:            (( grab meta.aws.bucket ))
+      region_name:       (( grab meta.aws.region_name ))
+      access_key_id:     (( grab meta.aws.access_key ))
+      secret_access_key: (( grab meta.aws.secret_key ))
+      regexp:            "compiled-releases/.*-(\\d+).tgz"
