@@ -1,0 +1,15 @@
+- path: /releases/name=redis/url
+  type: replace
+  value: "https://s3.amazonaws.com/redis-boshrelease/compiled-releases/redis-14.0.1-ubuntu-trusty-3541.12-20180414-201737-389627342-20180414201737.tgz"
+- path: /releases/name=redis/version
+  type: replace
+  value: "14.0.1"
+- path: /releases/name=redis/sha1
+  type: replace
+  value: "c101c45d5582783724d12ccf2886958e3b33e785"
+
+- path: /releases/name=redis/stemcell?
+  type: replace
+  value:
+    os: "ubuntu-trusty"
+    version: "3541.12"
