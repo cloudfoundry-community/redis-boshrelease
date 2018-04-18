@@ -2,4 +2,5 @@
   path: /releases/name=redis
   value:
     name: redis
-    version: latest
+    url: .
+    version: create

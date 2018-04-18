@@ -51,11 +51,19 @@ bosh deploy redis-boshrelease/manifests/redis.yml -o manifests/operators/use-com
 
 When new versions of `redis-boshrelease` are released the `manifests/redis.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.
 
-```
+```plain
 export BOSH_ENVIRONMENT=<alias>
 export BOSH_DEPLOYMENT=redis
 cd redis-boshrelease
 git pull
 cd -
 bosh deploy redis-boshrelease/manifests/redis.yml
+```
+
+### Development
+
+To create/upload/deploy local changes to this BOSH release use the `create.yml` operator:
+
+```plain
+bosh -d redis deploy manifests/redis.yml -o manifests/operators/create.yml
 ```

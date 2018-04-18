@@ -3,7 +3,7 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-export PATH=$PATH:/var/vcap/packages/redis/bin
+export PATH=$PATH:/var/vcap/packages/redis-4/bin
 
 EXITSTATUS=0
 

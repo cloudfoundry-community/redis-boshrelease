@@ -1,6 +1,6 @@
 ---
 name: sanity-tests
-packages: [redis]
+packages: [redis-4]
 templates:
   bin/run: bin/run
 
