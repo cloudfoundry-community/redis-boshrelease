@@ -1,12 +1,12 @@
 - path: /releases/name=redis/url
   type: replace
-  value: "https://s3.amazonaws.com/redis-boshrelease/compiled-releases/redis-15.0.0-ubuntu-trusty-3541.12-20180414-203032-147400348-20180414203032.tgz"
+  value: "https://s3.amazonaws.com/redis-boshrelease/compiled-releases/redis-15.1.0-ubuntu-trusty-3541.12-20180418-121908-981101734-20180418121909.tgz"
 - path: /releases/name=redis/version
   type: replace
-  value: "15.0.0"
+  value: "15.1.0"
 - path: /releases/name=redis/sha1
   type: replace
-  value: "d35564578a593deff5a5086b08e90b3680b3d780"
+  value: "0d6824ace4818333a5474d808f2c7d8280726a44"
 
 - path: /releases/name=redis/stemcell?
   type: replace
