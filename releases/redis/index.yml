@@ -15,6 +15,8 @@ builds:
     version: 14.0.1
   c7041b95-0b67-47d4-6127-37ae00f75ca5:
     version: 13.1.1
+  c93dfb83-5fc5-4aa7-5dbc-e959b3e2cffa:
+    version: 15.1.0
   f1a60b2c-810d-473e-ad5c-0d1dac514554:
     version: "12"
 format-version: "2"
