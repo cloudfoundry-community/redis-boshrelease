@@ -1,4 +1,4 @@
-redis/redis-4.0.9.tar.gz:
-  size: 1737022
-  object_id: 9777b985-694a-4890-6648-b75f9e38eb5c
-  sha: 8aa33d13c3ff5c4d4d2cc52932340893132c8aec
+redis/redis-4.0.11.tar.gz:
+  size: 1739656
+  object_id: 3cfa77ab-d17a-4253-57f6-4e2283f04232
+  sha: a13ccf0f7051f82dc1c979bd94f0b9a9ba039122
