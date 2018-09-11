@@ -314,6 +314,14 @@ slave-priority 100
 #
 # maxclients 10000
 
+<% if_p('redis.maxclients') do |maxclients| -%>
+<% if maxclients.to_i > 0 -%>
+maxclients <%= p("redis.maxclients") %>
+<% else -%>
+maxclients 10000
+<% end -%>
+<% end -%>
+
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys
 # accordingly to the eviction policy selected (see maxmemmory-policy).

@@ -2,9 +2,10 @@
 name: redis
 packages: [redis-4]
 templates:
-  config/bpm.yml: config/bpm.yml
+  config/bpm.yml.erb: config/bpm.yml
   config/redis.conf.erb: config/redis.conf
   bin/health_check: bin/health_check
+  bin/pre_start.sh: bin/pre_start.sh
 
 provides:
 - name: redis
@@ -48,3 +49,7 @@ properties:
   health.disk.warning:
     description: Percentage of persistent disk full to trigger warning health alert
     default: 50
+
+  redis.maxclients:
+    description: Set the max number of connected clients at the same time.
+    default: 10000
