@@ -1,0 +1,23 @@
+name: redis
+version: 15.2.0
+commit_hash: 612d1d3
+uncommitted_changes: false
+jobs:
+- name: redis
+  version: cf016174d806f4d025cddd831c2028d1ef3658f8
+  fingerprint: cf016174d806f4d025cddd831c2028d1ef3658f8
+  sha1: c64980671fe3e5d6df1fc37ad8913ee2dcb343c0
+- name: sanity-tests
+  version: 866d68289c2fd6066c97be56011825bba2cc58d5
+  fingerprint: 866d68289c2fd6066c97be56011825bba2cc58d5
+  sha1: 82920c98baf5d7f44f41704514984b1eb90749b7
+packages:
+- name: redis-4
+  version: a3c434216eff51abbb62eadf23487cee73ba4b3e
+  fingerprint: a3c434216eff51abbb62eadf23487cee73ba4b3e
+  sha1: 6a1cfb776dd6369db2c3c48993e441facaefd4ea
+  dependencies: []
+license:
+  version: a3e6d245553160dad1d273d363550134abc94578
+  fingerprint: a3e6d245553160dad1d273d363550134abc94578
+  sha1: 6167c4bd192473d776be0d683bd3d4f48f5c3e76
