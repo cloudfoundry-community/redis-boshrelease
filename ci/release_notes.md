@@ -1,0 +1,1 @@
+* Adds the redis.replication true/false option

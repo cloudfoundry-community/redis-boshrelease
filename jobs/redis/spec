@@ -53,3 +53,6 @@ properties:
   redis.maxclients:
     description: Set the max number of connected clients at the same time.
     default: 10000
+  redis.replication:
+    description: When set to false, master/slave replication will be disabled and all instances will run as standalone deployments.
+    default: true
