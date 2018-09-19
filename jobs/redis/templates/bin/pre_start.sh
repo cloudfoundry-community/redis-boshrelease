@@ -22,3 +22,7 @@ chpst -u root:root sysctl -w net.core.somaxconn=65535
 #
 # Redis best practice is vm.overcommit_memory=1 (https://redis.io/topics/admin)
 chpst -u root:root sysctl vm.overcommit_memory=1
+
+
+# Earlier builds generated a redis.log owned by root.  This resets logs dir owners to vcap.
+chpst -u root:root chown -R vcap:vcap /var/vcap/sys/log
