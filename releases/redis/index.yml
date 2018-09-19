@@ -7,6 +7,8 @@ builds:
     version: 15.2.0
   599915c2-24d8-4070-975d-be9f6ef77426:
     version: "10"
+  63b70c2d-040d-4bfa-5518-e689f58d2f2e:
+    version: 15.2.2
   687caccc-ef36-4d5e-baeb-44c37cd59318:
     version: "11"
   81b28ea9-976f-4a95-4bdd-3b5022e6af29:
