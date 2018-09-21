@@ -56,3 +56,6 @@ properties:
   redis.replication:
     description: When set to false, master/slave replication will be disabled and all instances will run as standalone deployments.
     default: true
+  redis.raw_config:
+    description: Block literal representing redis configuration.  Appended at the end of redis.conf, the raw values provided will take precedence over any other configuration properties
+    default: ""

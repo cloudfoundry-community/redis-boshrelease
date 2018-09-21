@@ -633,3 +633,12 @@ aof-rewrite-incremental-fsync yes
 #
 # include /path/to/local.conf
 # include /path/to/other.conf
+
+
+
+# Redis reads configs top to bottom.  This block enables us to inject 
+# raw config values to overwride any defaults or bosh release parameters
+<% if_p('redis.raw_config') do |redis_config| -%>
+<%= redis_config %>
+<% end -%>
+
