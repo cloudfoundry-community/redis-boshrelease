@@ -32,7 +32,7 @@ meta:
     tag: latest
 
   aws:
-    bucket:     (( concat meta.pipeline "-pipeline" ))
+    bucket:     (( grab meta.pipeline ))
     region_name: us-east-1
     access_key: (( param "Please set your AWS Access Key ID for your pipeline S3 Bucket" ))
     secret_key: (( param "Please set your AWS Secret Key ID for your pipeline S3 Bucket" ))
@@ -70,7 +70,7 @@ groups:
       - testflight-pr
       - rc
       - shipit
-      - compile-release-3541
+      - compile-release-250
       - use-compiled-releases
   - name: versioning
     jobs:
@@ -374,13 +374,13 @@ jobs:
           icon_url: (( grab meta.slack.icon ))
           text:    '(( concat meta.slack.fail_url " " meta.pipeline ": shipit job failed" ))'
 
-  - name: compile-release-3541
+  - name: compile-release-250
     plan:
       - aggregate:
         - get: git
         - get: github
           trigger: true
-        - get: ubuntu-trusty-stemcell-3541
+        - get: ubuntu-xenial-stemcell-250
           params: {tarball: false}
       - task: export-release
         config:
@@ -392,7 +392,7 @@ jobs:
               tag:        (( grab meta.image.tag ))
           inputs:
             - name: git
-            - name: ubuntu-trusty-stemcell-3541
+            - name: ubuntu-xenial-stemcell-250
               path: stemcell
             - name: github
               path: release
@@ -405,22 +405,22 @@ jobs:
             BOSH_CA_CERT:         (( grab meta.bosh-lite.cacert ))
             BOSH_CLIENT:          (( grab meta.bosh-lite.username ))
             BOSH_CLIENT_SECRET:   (( grab meta.bosh-lite.password ))
-      - put: compiled-releases
+      - put: compiled-release
         params:
-          file: "compiled-release/compiled-releases/*.tgz"
+          file: (( concat "compiled-release/compiled-releases/" meta.name "/*.tgz" ))
 
   - name: use-compiled-releases
     plan:
       - aggregate:
         - get: git
         - get: github
-          passed: [compile-release-3541]
+          passed: [compile-release-250]
           trigger: true
-        - get: ubuntu-trusty-stemcell-3541
-          passed: [compile-release-3541]
+        - get: ubuntu-xenial-stemcell-250
+          passed: [compile-release-250]
           params: {tarball: false}
-        - get: compiled-releases
-          passed: [compile-release-3541]
+        - get: compiled-release
+          passed: [compile-release-250]
       - task: use-compiled-releases
         config:
           platform: linux
@@ -431,11 +431,11 @@ jobs:
               tag:        (( grab meta.image.tag ))
           inputs:
             - name: git
-            - name: ubuntu-trusty-stemcell-3541
+            - name: ubuntu-xenial-stemcell-250
               path: stemcell
             - name: github
               path: release
-            - name: compiled-releases
+            - name: compiled-release
           outputs:
             - name: pushme
           run:
@@ -512,17 +512,17 @@ resources:
       access_key_id:     (( grab meta.aws.access_key ))
       secret_access_key: (( grab meta.aws.secret_key ))
 
-  - name: ubuntu-trusty-stemcell-3541
+  - name: ubuntu-xenial-stemcell-250
     type: bosh-io-stemcell
     source:
-      name: bosh-warden-boshlite-ubuntu-trusty-go_agent
-      version_family: 3541.latest
+      name: bosh-warden-boshlite-ubuntu-xenial-go_agent
+      version_family: 250.latest
 
-  - name: compiled-releases
+  - name: compiled-release
     type: s3
     source:
       bucket:            (( grab meta.aws.bucket ))
       region_name:       (( grab meta.aws.region_name ))
       access_key_id:     (( grab meta.aws.access_key ))
       secret_access_key: (( grab meta.aws.secret_key ))
-      regexp:            "compiled-releases/.*-(\\d+).tgz"
+      regexp:            (( concat "compiled-releases/" meta.name "/.*-(\\d+).tgz" ))
