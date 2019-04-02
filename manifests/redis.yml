@@ -50,7 +50,7 @@ releases:
 - name: bpm
   sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
   url: git+https://github.com/cloudfoundry-incubator/bpm-release
-  version: 1.0.3
+  version: 1.0.4
 - name: redis
   sha1: 7851118ef38a8393a70869b3b254e14ec4fd24a7
   stemcell:
