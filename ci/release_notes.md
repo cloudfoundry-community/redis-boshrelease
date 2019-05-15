@@ -1,2 +1,3 @@
-* Bumped bpm to v1.0.3
-* Bumped bpm to v1.0.4
+## Redis Sentinel
+
+* Added redis-sentinel job for highly available redis  

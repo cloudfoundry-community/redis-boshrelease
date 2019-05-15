@@ -1,0 +1,11 @@
+- path: /instance_groups/name=redis/jobs/-
+  type: replace
+  value:
+    name: redis-sentinel
+    release: redis
+
+- path: /instance_groups/name=redis/jobs/name=redis/properties?
+  type: replace
+  value:
+    password: ((redis_password))
+    bind_static_ip: true

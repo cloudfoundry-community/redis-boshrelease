@@ -47,6 +47,27 @@ There you can speed up initial deployment using pre-compiled releases with the `
 bosh deploy redis-boshrelease/manifests/redis.yml -o manifests/operators/use-compiled-releases.yml
 ```
 
+### Sentinel
+**This is not a cluster_enabled redis deployment.**
+
+Redis Sentinel provides high availability for Redis. In this bosh release, you can include the redis-sentinel job to manage failover for 2 or more Redis instances in replication mode.
+ 
+**Note: Set "bind_static_ip" to true using the redis-sentinel job.**
+
+```plain
+[...]
+  instances: 3
+  jobs:
+[...] 
+  - name: redis
+    release: redis
+  - name: redis-sentinel
+    release: redis
+  properties:
+    bind_static_ip: true
+    password: ((redis_password)
+```
+
 ### Update
 
 When new versions of `redis-boshrelease` are released the `manifests/redis.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.

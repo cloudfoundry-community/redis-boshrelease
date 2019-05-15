@@ -1,0 +1,32 @@
+---
+name: redis-sentinel
+packages: [redis-4]
+templates:
+  config/bpm.yml.erb: config/bpm.yml
+  config/sentinel.conf.erb: config/sentinel.conf
+  bin/pre_start.sh: bin/pre_start.sh
+  bin/wrapper.sh: bin/wrapper.sh
+
+consumes:
+- name: redis
+  type: redis
+  
+properties:
+
+  redis.maxclients:
+    description: Set the max number of connected clients at the same time.
+    default: 10000
+
+  base_dir:
+    description: Base dir for storing database files
+    default: /var/vcap/data/redis-sentinel
+
+  sentinel.port:
+    description: Port to listen for requests to redis server
+    default: 26379
+  sentinel.redis_port:
+    description: Port your redis slaves are running on 
+    default: 6379
+  sentinel.quorum:
+    description: Quorum for "# sentinel monitor <master-name> <ip> <redis-port> <quorum>"
+    default: 2

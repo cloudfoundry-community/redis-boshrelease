@@ -10,7 +10,6 @@ processes:
   hooks:
     pre_start: /var/vcap/jobs/redis/bin/pre_start.sh
 
-
 <% if_p('redis.maxclients') do |maxclients| -%>
 <% if maxclients.to_i > 0 -%>
   limits:

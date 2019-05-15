@@ -1,0 +1,5 @@
+check process redis-sentinel
+  with pidfile /var/vcap/sys/run/bpm/redis-sentinel/redis-sentinel.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start redis-sentinel"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop redis-sentinel"
+  group vcap
