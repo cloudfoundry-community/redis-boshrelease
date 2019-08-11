@@ -32,7 +32,7 @@ meta:
     tag: latest
 
   aws:
-    bucket:     (( concat meta.pipeline "-pipeline" ))
+    bucket:     (( grab meta.pipeline ))
     region_name: us-east-1
     access_key: (( param "Please set your AWS Access Key ID for your pipeline S3 Bucket" ))
     secret_key: (( param "Please set your AWS Secret Key ID for your pipeline S3 Bucket" ))
@@ -68,6 +68,7 @@ groups:
     jobs:
       - testflight
       - testflight-pr
+      - pre
       - rc
       - shipit
       - compile-release-250
@@ -208,14 +209,64 @@ jobs:
           icon_url: (( grab meta.slack.icon ))
           text_file: message/body
 
+  - name: pre
+    public: true
+    serial: true
+    plan:
+    - do:
+      - get: git
+        passed:
+        - testflight
+        trigger: true
+      - get: version
+        trigger: true
+      - task: release-notes
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: starkandwayne/concourse
+              tag: latest
+          run:
+            path: sh
+            args:
+            - -ce
+            - |
+              cd git
+              if [ -f ci/release_notes.md ]; then
+                echo "######   RELEASE NOTES   ###############"
+                echo
+                cat ci/release_notes.md
+                echo
+                echo "########################################"
+                echo
+              else
+                echo "NO RELEASE NOTES HAVE BEEN WRITTEN"
+                echo "You *might* want to do that before"
+                echo "hitting (+) on that shipit job..."
+                echo
+              fi
+          inputs:
+          - name: git
+      on_failure:
+        put: notify
+        params:
+          channel:  (( grab meta.slack.channel ))
+          username: (( grab meta.slack.username ))
+          icon_url: (( grab meta.slack.icon ))
+          link: https://pipes.starkandwayne.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+          message: release candidate job 'pre' failed (which is unusual).
+          ok: false
+
   - name: rc
     public: true
     serial: true
     plan:
     - do:
       - aggregate:
-          - { get: git,     trigger: true,  passed: [testflight] }
-          - { get: version, trigger: true, params: {pre: rc} }
+          - { get: git,     trigger: true,  passed: [pre] }
+          - { get: version, trigger: false, params: {pre: rc} }
       - task: release-notes
         config:
           platform: linux
@@ -343,10 +394,10 @@ jobs:
         params:
           rebase: true
           repository: pushme
-      # - name: tarball
-      #   put: s3-tarball
-      #   params:
-      #     file:  (( concat "gh/artifacts/" meta.name "-*.tgz" ))
+      - name: tarball
+        put: s3-tarball
+        params:
+          file:  (( concat "gh/artifacts/" meta.name "-*.tgz" ))
       - name: github-release
         put: github
         params:
@@ -503,14 +554,14 @@ resources:
       repository:   (( grab meta.github.repo ))
       access_token: (( grab meta.github.access_token ))
 
-  # - name: s3-tarball
-  #   type: s3
-  #   source:
-  #     bucket:            (( grab meta.aws.bucket ))
-  #     region_name:       (( grab meta.aws.region_name ))
-  #     regexp:            (( concat meta.name "-(.*).tgz" ))
-  #     access_key_id:     (( grab meta.aws.access_key ))
-  #     secret_access_key: (( grab meta.aws.secret_key ))
+  - name: s3-tarball
+    type: s3
+    source:
+      bucket:            (( grab meta.aws.bucket ))
+      region_name:       (( grab meta.aws.region_name ))
+      regexp:            (( concat meta.name "-(.*).tgz" ))
+      access_key_id:     (( grab meta.aws.access_key ))
+      secret_access_key: (( grab meta.aws.secret_key ))
 
   - name: ubuntu-xenial-stemcell-250
     type: bosh-io-stemcell
