@@ -86,38 +86,34 @@ jobs:
     plan:
     - name: main
       do:
-      - name: get
-        aggregate:
-        - { get: git, trigger: true }
-      - name: testflights
-        aggregate:
-        - name: testflight
-          task: testflight
-          config:
-            platform: linux
-            image_resource:
-              type: docker-image
-              source:
-                repository: (( grab meta.image.name ))
-                tag:        (( grab meta.image.tag ))
-            inputs:
-              - { name: git }
-            run:
-              path: ./git/ci/scripts/testflight
-              args: []
-            params:
-              REPO_ROOT:            git
-              BOSH_ENVIRONMENT:     (( grab meta.bosh.target ))
-              BOSH_CA_CERT:         (( grab meta.bosh.cacert ))
-              BOSH_CLIENT:          (( grab meta.bosh.username ))
-              BOSH_CLIENT_SECRET:   (( grab meta.bosh.password ))
-              BOSH_DEPLOYMENT:      (( grab meta.bosh.deployment ))
-              TEST_ERRANDS:         (( grab meta.test-errands || meta.test-errand || ~ ))
-              AWS_ACCESS_KEY:       (( grab meta.aws.access_key ))
-              AWS_SECRET_KEY:       (( grab meta.aws.secret_key ))
-              MANIFEST_PATH:        (( grab meta.manifest.path ))
-              MANIFEST_VARS:        (( grab meta.manifest.vars ))
-              MANIFEST_OP_PATHS:    (( grab meta.manifest.operator_file_paths ))
+      - { get: git, trigger: true }
+      - name: testflight
+        task: testflight
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          inputs:
+            - { name: git }
+          run:
+            path: ./git/ci/scripts/testflight
+            args: []
+          params:
+            REPO_ROOT:            git
+            BOSH_ENVIRONMENT:     (( grab meta.bosh.target ))
+            BOSH_CA_CERT:         (( grab meta.bosh.cacert ))
+            BOSH_CLIENT:          (( grab meta.bosh.username ))
+            BOSH_CLIENT_SECRET:   (( grab meta.bosh.password ))
+            BOSH_DEPLOYMENT:      (( grab meta.bosh.deployment ))
+            TEST_ERRANDS:         (( grab meta.test-errands || meta.test-errand || ~ ))
+            AWS_ACCESS_KEY:       (( grab meta.aws.access_key ))
+            AWS_SECRET_KEY:       (( grab meta.aws.secret_key ))
+            MANIFEST_PATH:        (( grab meta.manifest.path ))
+            MANIFEST_VARS:        (( grab meta.manifest.vars ))
+            MANIFEST_OP_PATHS:    (( grab meta.manifest.operator_file_paths ))
       on_failure:
         put: notify
         params:
@@ -132,53 +128,49 @@ jobs:
     plan:
     - name: main
       do:
-      - name: get
-        aggregate:
-          - { get: git-pull-requests, trigger: true, version: every }
+      - { get: git-pull-requests, trigger: true, version: every }
       - name: pending-status
         put: git-pull-requests
         params:
           path: git-pull-requests
           status: pending
-      - name: testflights
-        aggregate:
-        - name: testflight
-          task: testflight
-          config:
-            platform: linux
-            image_resource:
-              type: docker-image
-              source:
-                repository: (( grab meta.image.name ))
-                tag:        (( grab meta.image.tag ))
-            inputs:
-              - { name: git-pull-requests }
-            run:
-              path: ./git-pull-requests/ci/scripts/testflight
-              args: []
-            params:
-              REPO_ROOT:            git-pull-requests
-              BOSH_ENVIRONMENT:     (( grab meta.bosh.target ))
-              BOSH_CA_CERT:         (( grab meta.bosh.cacert ))
-              BOSH_CLIENT:          (( grab meta.bosh.username ))
-              BOSH_CLIENT_SECRET:   (( grab meta.bosh.password ))
-              BOSH_DEPLOYMENT:      (( grab meta.bosh.deployment-pr ))
-              TEST_ERRANDS:         (( grab meta.test-errands || meta.test-errand || ~ ))
-              AWS_ACCESS_KEY:       (( grab meta.aws.access_key ))
-              AWS_SECRET_KEY:       (( grab meta.aws.secret_key ))
-              MANIFEST_PATH:        (( grab meta.manifest.path ))
-              MANIFEST_VARS:        (( grab meta.manifest.vars-pr ))
-              MANIFEST_OP_PATHS:    (( grab meta.manifest.operator_file_paths ))
-          on_success:
-            put: git-pull-requests
-            params:
-              path: git-pull-requests
-              status: success
-          on_failure:
-            put: git-pull-requests
-            params:
-              path: git-pull-requests
-              status: failure
+      - name: testflight
+        task: testflight
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          inputs:
+            - { name: git-pull-requests }
+          run:
+            path: ./git-pull-requests/ci/scripts/testflight
+            args: []
+          params:
+            REPO_ROOT:            git-pull-requests
+            BOSH_ENVIRONMENT:     (( grab meta.bosh.target ))
+            BOSH_CA_CERT:         (( grab meta.bosh.cacert ))
+            BOSH_CLIENT:          (( grab meta.bosh.username ))
+            BOSH_CLIENT_SECRET:   (( grab meta.bosh.password ))
+            BOSH_DEPLOYMENT:      (( grab meta.bosh.deployment-pr ))
+            TEST_ERRANDS:         (( grab meta.test-errands || meta.test-errand || ~ ))
+            AWS_ACCESS_KEY:       (( grab meta.aws.access_key ))
+            AWS_SECRET_KEY:       (( grab meta.aws.secret_key ))
+            MANIFEST_PATH:        (( grab meta.manifest.path ))
+            MANIFEST_VARS:        (( grab meta.manifest.vars-pr ))
+            MANIFEST_OP_PATHS:    (( grab meta.manifest.operator_file_paths ))
+        on_success:
+          put: git-pull-requests
+          params:
+            path: git-pull-requests
+            status: success
+        on_failure:
+          put: git-pull-requests
+          params:
+            path: git-pull-requests
+            status: failure
       - name: pr-success-message
         task: pr-success-message
         config:
@@ -264,9 +256,8 @@ jobs:
     serial: true
     plan:
     - do:
-      - aggregate:
-          - { get: git,     trigger: true,  passed: [pre] }
-          - { get: version, trigger: false, params: {pre: rc} }
+      - { get: git,     trigger: true,  passed: [pre] }
+      - { get: version, trigger: false, params: {pre: rc} }
       - task: release-notes
         config:
           platform: linux
@@ -353,10 +344,8 @@ jobs:
     serial: true
     plan:
     - do:
-      - name: inputs
-        aggregate:
-          - { get: version, passed: [rc], params: {bump: final} }
-          - { get: git,     passed: [rc] }
+      - { get: version, passed: [rc], params: {bump: final} }
+      - { get: git,     passed: [rc] }
       - name: release
         task: release
         config:
@@ -410,13 +399,12 @@ jobs:
         params:
           bump: patch
       - name: notify
-        aggregate:
-        - put: notify
-          params:
-            channel:  (( grab meta.slack.channel ))
-            username: (( grab meta.slack.username ))
-            icon_url: (( grab meta.slack.icon ))
-            text_file: notifications/message
+        put: notify
+        params:
+          channel:  (( grab meta.slack.channel ))
+          username: (( grab meta.slack.username ))
+          icon_url: (( grab meta.slack.icon ))
+          text_file: notifications/message
       on_failure:
         put: notify
         params:
@@ -427,12 +415,11 @@ jobs:
 
   - name: compile-release-250
     plan:
-      - aggregate:
-        - get: git
-        - get: github
-          trigger: true
-        - get: ubuntu-xenial-stemcell-250
-          params: {tarball: false}
+      - get: git
+      - get: github
+        trigger: true
+      - get: ubuntu-xenial-stemcell-250
+        params: {tarball: false}
       - task: export-release
         config:
           platform: linux
@@ -462,16 +449,15 @@ jobs:
 
   - name: use-compiled-releases
     plan:
-      - aggregate:
-        - get: git
-        - get: github
-          passed: [compile-release-250]
-          trigger: true
-        - get: ubuntu-xenial-stemcell-250
-          passed: [compile-release-250]
-          params: {tarball: false}
-        - get: compiled-release
-          passed: [compile-release-250]
+      - get: git
+      - get: github
+        passed: [compile-release-250]
+        trigger: true
+      - get: ubuntu-xenial-stemcell-250
+        passed: [compile-release-250]
+        params: {tarball: false}
+      - get: compiled-release
+        passed: [compile-release-250]
       - task: use-compiled-releases
         config:
           platform: linux

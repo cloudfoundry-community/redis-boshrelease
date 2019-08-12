@@ -42,9 +42,8 @@ jobs:
 - name: bpm-release
   public: true
   plan:
-  - aggregate:
-    - { get: git }
-    - { get: bpm-release, trigger: true, params: { tarball: false }}
+  - { get: git }
+  - { get: bpm-release, trigger: true, params: { tarball: false }}
   - task: bump-bpm
     config:
       image_resource:
