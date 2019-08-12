@@ -33,4 +33,6 @@ builds:
     version: 15.1.0
   f1a60b2c-810d-473e-ad5c-0d1dac514554:
     version: "12"
+  f6c500b1-df9a-4922-4a86-a07bbe2d9db5:
+    version: 15.3.1
 format-version: "2"
