@@ -47,7 +47,7 @@ meta:
 
   bosh:
     stemcell:
-      major: 250
+      major: 456
       cpi: aws-xen-hvm
       os: ubuntu-xenial
     target:   ((bosh_environment))
