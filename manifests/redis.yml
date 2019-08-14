@@ -52,9 +52,9 @@ releases:
   url: git+https://github.com/cloudfoundry-incubator/bpm-release
   version: 1.0.4
 - name: redis
-  sha1: fd5789ccd15c4bd8d801fa1f74c825f623a8f1aa
+  sha1: 36dd9ba0fcc97b8e3287298458fbb39f88ab8598
   stemcell:
     os: ubuntu-xenial
-    version: "250.84"
-  url: https://s3.amazonaws.com/redis-boshrelease/compiled-releases/redis/redis-15.3.1-ubuntu-xenial-250.84-20190812-120349-614784698-20190812120349.tgz
+    version: "456.3"
+  url: https://s3.amazonaws.com/redis-boshrelease/compiled-releases/redis/redis-15.3.1-ubuntu-xenial-456.3-20190814-222433-83249465-20190814222434.tgz
   version: 15.3.1
