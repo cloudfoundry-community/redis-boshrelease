@@ -10,8 +10,7 @@ Deploy Redis cluster with pre-compiled releases:
 
 ```plain
 bosh -d redis deploy \
-    <(curl -L https://raw.githubusercontent.com/cloudfoundry-community/redis-boshrelease/master/manifests/redis.yml) \
-    -o <(curl -L https://raw.githubusercontent.com/cloudfoundry-community/redis-boshrelease/master/manifests/operators/use-compiled-releases.yml)
+    <(curl -L https://raw.githubusercontent.com/cloudfoundry-community/redis-boshrelease/master/manifests/redis.yml)
 ```
 
 Usage
@@ -41,17 +40,12 @@ If you have any errors about `Instance group 'redis' references an unknown vm ty
 bosh deploy redis-boshrelease/manifests/redis.yml -o <(./manifests/operators/pick-from-cloud-config.sh)
 ```
 
-There you can speed up initial deployment using pre-compiled releases with the `use-compiled-releases.yml` operator file:
-
-```plain
-bosh deploy redis-boshrelease/manifests/redis.yml -o manifests/operators/use-compiled-releases.yml
-```
-
 ### Sentinel
+
 **This is not a cluster_enabled redis deployment.**
 
 Redis Sentinel provides high availability for Redis. In this bosh release, you can include the redis-sentinel job to manage failover for 2 or more Redis instances in replication mode.
- 
+
 **Note: Set "bind_static_ip" to true using the redis-sentinel job.**
 
 ```plain
