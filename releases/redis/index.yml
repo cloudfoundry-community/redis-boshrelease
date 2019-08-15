@@ -11,6 +11,8 @@ builds:
     version: "10"
   63b70c2d-040d-4bfa-5518-e689f58d2f2e:
     version: 15.2.2
+  685862d9-58f1-4402-52a7-0e4e5dcc9d62:
+    version: 15.3.3
   687caccc-ef36-4d5e-baeb-44c37cd59318:
     version: "11"
   81b28ea9-976f-4a95-4bdd-3b5022e6af29:
