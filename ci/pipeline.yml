@@ -75,13 +75,15 @@ groups:
       - pre
       - rc
       - shipit
-      - compile-release
-      - use-compiled-releases
   - name: versioning
     jobs:
       - major
       - minor
       - patch
+  - name: compiled-releases
+    jobs:
+      - compile-release
+      - use-compiled-releases
 
 jobs:
   - name: testflight
@@ -453,18 +455,18 @@ jobs:
 
   - name: use-compiled-releases
     plan:
-      - get: git
-      - get: github
-        passed:
-        - compile-release
-        trigger: true
-      - get: (( concat meta.bosh.stemcell.os "-stemcell-" meta.bosh.stemcell.major ))
-        passed:
-        - compile-release
-        params: {tarball: false}
-      - get: compiled-release
-        passed:
-        - compile-release
+      - name: resources
+        in_parallel:
+          steps:
+            - get: git
+            - get: github
+              passed: [compile-release]
+              trigger: true
+            - get: (( concat meta.bosh.stemcell.os "-stemcell-" meta.bosh.stemcell.major ))
+              passed: [compile-release]
+              params: {tarball: false}
+            - get: compiled-release
+              passed: [compile-release]
       - task: use-compiled-releases
         config:
           platform: linux

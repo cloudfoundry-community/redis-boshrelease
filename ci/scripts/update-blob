@@ -8,6 +8,21 @@ set -e
 : ${BLOB_CLEANUP:?required}
 : ${BLOB_DESTINATION:?required}
 
+# if git-release, then look for tag
+# git describe --tags `git rev-list --tags --max-count=1`
+# then convert v2.23.0 to VERSION=2.23.0
+[[ -f ${BLOB_DIR}/version ]] || {
+  # Perhaps move this into helper script that creates a github-release style folder
+  pushd ${BLOB_DIR}
+  tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+  popd
+  resource_dir=${BLOB_NAME}-${tag//v/}
+  git clone ${BLOB_DIR} ${resource_dir}
+  rm -rf ${resource_dir}/.git
+  echo ${tag}     > ${BLOB_DIR}/tag
+  echo ${tag//v/} > ${BLOB_DIR}/version
+  tar czf ${BLOB_DIR}/${BLOB_NAME}-${tag//v/}.tar.gz ${resource_dir}
+}
 VERSION=$(cat ${BLOB_DIR}/version)
 
 pushd ${REPO_ROOT:?required}
@@ -36,9 +51,7 @@ popd
 if [[ -n "$(cd ${REPO_ROOT}; git status --porcelain)" ]]; then
   pushd ${REPO_ROOT}
   cat <<EOF >>ci/release_notes.md
-
-# ${BLOB_NAME}
-Bumped ${BLOB_URL} to v${VERSION}
+* Bumped ${BLOB_URL} to v${VERSION}
 EOF
   popd
 
