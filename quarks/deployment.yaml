@@ -1,0 +1,193 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-manifest
+data:
+  manifest: |
+    ---
+    name: redis
+
+    addons:
+    - name: bpm
+      jobs:
+      - name: bpm
+        release: bpm
+
+    instance_groups:
+    - name: redis
+      azs: [z1]
+      instances: 2
+      vm_type: default
+      stemcell: default
+      persistent_disk: 10240
+      networks: [{name: default}]
+      jobs:
+      - name: redis
+        release: redis
+        properties:
+          password: ((redis-password))
+    - name: sanity-tests
+      azs: [z1]
+      instances: 1
+      lifecycle: errand
+      vm_type: default
+      stemcell: default
+      networks: [{name: default}]
+      jobs:
+      - name: sanity-tests
+        release: redis
+
+    variables:
+    - name: redis-password
+      type: password
+
+    update:
+      canaries: 0
+      max_in_flight: 1
+      serial: true
+      canary_watch_time: 1000-20000
+      update_watch_time: 1000-20000
+
+    stemcells:
+    - alias: default
+      os: ubuntu-xenial
+      version: 456.latest
+
+    releases:
+    - name: bpm
+      sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
+      url: git+https://github.com/cloudfoundry-incubator/bpm-release
+      version: 1.0.4
+    - name: redis
+      sha1: 9ad77d700cf773ae47328c99eddb80d83648b57d
+      stemcell:
+        os: ubuntu-xenial
+        version: "456.3"
+      url: https://s3.amazonaws.com/redis-boshrelease/compiled-releases/redis/redis-15.3.3-ubuntu-xenial-456.3-20190815-004641-067837581-20190815004641.tgz
+      version: 15.3.3
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-tags
+data:
+  ops: |
+    - type: replace
+      path: /tags?
+      value:
+        maintainer: "Dr Nic Williams, Stark & Wayne"
+        maintainer_email: "drnicwilliams@gmail.com"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-no-bpm
+data:
+  ops: |
+    - type: remove
+      path: /addons
+    - type: remove
+      path: /releases/name=bpm
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-no-errands
+data:
+  ops: |
+    - type: remove
+      path: /instance_groups/name=sanity-tests
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-redis-quarks
+data:
+  ops: |
+    - type: replace
+      path: /instance_groups/name=redis/jobs/name=redis/properties/quarks?
+      value:
+        ports:
+        - name: "redis"
+          protocol: "TCP"
+          internal: 6379
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-release-image
+  # dockerhub: cfcommunity/redis:opensuse-42.3-38.g82067a9-30.95-7.0.0_354.gacefcfa4-15.3.3
+data:
+  ops: |
+    - type: remove
+      path: /releases/name=redis/sha1
+    - type: replace
+      path: /releases/name=redis/url
+      value: docker.io/cfcommunity
+    - type: replace
+      path: /releases/name=redis/stemcell
+      value:
+        os: opensuse-42.3
+        version: 38.g82067a9-30.95-7.0.0_354.gacefcfa4
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-persistence
+data:
+  ops: |
+    - type: replace
+      path: /instance_groups/name=redis/persistent_disk_type?
+      value: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-cleanup-ig
+data:
+  ops: |
+    - type: remove
+      path: /instance_groups/name=redis/stemcell
+    - type: remove
+      path: /instance_groups/name=redis/vm_type
+    - type: remove
+      path: /instance_groups/name=redis/networks
+    - type: remove
+      path: /instance_groups/name=redis/azs
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-ops-single-instance
+data:
+  ops: |
+    - type: replace
+      path: /instance_groups/name=redis/instances
+      value: 1
+---
+apiVersion: fissile.cloudfoundry.org/v1alpha1
+kind: BOSHDeployment
+metadata:
+  name: redis-deployment
+spec:
+  manifest:
+    name: redis-manifest
+    type: configmap
+  ops:
+  - name: redis-ops-tags
+    type: configmap
+  - name: redis-ops-no-bpm
+    type: configmap
+  - name: redis-ops-no-errands
+    type: configmap
+  - name: redis-ops-redis-quarks
+    type: configmap
+  - name: redis-ops-release-image
+    type: configmap
+  - name: redis-ops-persistence
+    type: configmap
+  - name: redis-ops-cleanup-ig
+    type: configmap
+  - name: redis-ops-single-instance
+    type: configmap
