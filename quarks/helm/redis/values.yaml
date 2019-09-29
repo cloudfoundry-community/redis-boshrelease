@@ -5,8 +5,8 @@ releases:
   defaults:
     url: docker.io/cfcommunity
     stemcell:
-      os: opensuse-42.3
-      version: 38.g82067a9-30.95-7.0.0_354.gacefcfa4
+      os: opensuse-42.3 # stemcell.os UPDATED BY CI
+      version: 38.g82067a9-30.95-7.0.0_354.gacefcfa4 # stemcell.version UPDATED BY CI
 
 cluster:
   instances: 1
