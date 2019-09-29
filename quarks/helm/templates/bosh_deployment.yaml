@@ -19,6 +19,14 @@ spec:
   - name: {{ include "quarks.ops-name" $path }}
     type: configmap
 {{- end }}
+{{- range $path, $bytes := .Files.Glob "assets/operations/gke/*" }}
+  - name: {{ include "quarks.ops-name" $path }}
+    type: configmap
+{{- end }}
+{{- range $path, $bytes := .Files.Glob "assets/operations/optional/*" }}
+  - name: {{ include "quarks.ops-name" $path }}
+    type: configmap
+{{- end }}
 {{- range $_, $ops := .Values.operations.custom }}
   - name: {{ $ops | quote }}
     type: configmap
