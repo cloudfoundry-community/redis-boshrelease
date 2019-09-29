@@ -21,9 +21,3 @@ data:
 {{- range $path, $bytes := .Files.Glob "assets/operations/*" }}
 {{ include "quarks.ops" (dict "Root" $root "Path" $path) }}
 {{- end }}
-{{- range $path, $bytes := .Files.Glob "assets/operations/gke/*" }}
-{{ include "quarks.ops" (dict "Root" $root "Path" $path) }}
-{{- end }}
-{{- range $path, $bytes := .Files.Glob "assets/operations/optional/*" }}
-{{ include "quarks.ops" (dict "Root" $root "Path" $path) }}
-{{- end }}
