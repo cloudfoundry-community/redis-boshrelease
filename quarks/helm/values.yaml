@@ -1,4 +1,4 @@
-deployment_name: redis
+deployment_name: redis-deployment
 
 releases:
   # The defaults for all releases, where we do not otherwise override them.

@@ -12,7 +12,7 @@ metadata:
     helm.sh/chart: {{ include "quarks.chart" . }}
 spec:
   manifest:
-    name: {{ .Values.deployment_name }}-deployment
+    name: redis-deployment
     type: configmap
   ops:
 {{- range $path, $bytes := .Files.Glob "assets/operations/*" }}

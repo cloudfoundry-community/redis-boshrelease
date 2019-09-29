@@ -1,0 +1,29 @@
+# This template creates a ConfigMap for each ops file under assets/operations.
+{{- define "quarks.ops" -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "quarks.ops-name" .Path }}
+  labels:
+    app.kubernetes.io/component: operations
+    app.kubernetes.io/instance: {{ .Root.Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Root.Release.Service | quote }}
+    app.kubernetes.io/name: {{ include "quarks.fullname" .Root }}
+    app.kubernetes.io/version: {{ default .Root.Chart.Version .Root.Chart.AppVersion | quote }}
+    helm.sh/chart: {{ include "quarks.chart" .Root }}
+data:
+  ops: |-
+    {{- tpl (.Root.Files.Get .Path) .Root | nindent 4 -}}
+{{- end -}}
+
+{{- $root := . -}}
+{{- range $path, $bytes := .Files.Glob "assets/operations/*" }}
+{{ include "quarks.ops" (dict "Root" $root "Path" $path) }}
+{{- end }}
+{{- range $path, $bytes := .Files.Glob "assets/operations/gke/*" }}
+{{ include "quarks.ops" (dict "Root" $root "Path" $path) }}
+{{- end }}
+{{- range $path, $bytes := .Files.Glob "assets/operations/optional/*" }}
+{{ include "quarks.ops" (dict "Root" $root "Path" $path) }}
+{{- end }}
