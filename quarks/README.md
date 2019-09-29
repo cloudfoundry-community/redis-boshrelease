@@ -21,6 +21,15 @@ Fast failure of BOSH operators by running them thru `bosh int` immediately, rath
 ```plain
 kubectl apply -n scf \
     -f <(./quarks/deployment.sh \
-        manifests/operators/quarks/gke/persistence.yml \
-        manifests/operators/quarks/optional/solo.yml)
+           quarks/operations/gke/persistence.yml \
+            quarks/operations/optional/solo.yml)
+```
+
+## Helm chart
+
+```plain
+helm upgrade --install --wait --namespace scf \
+    redis-deployment \
+    quarks/helm \
+    --set ...
 ```

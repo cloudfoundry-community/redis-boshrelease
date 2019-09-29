@@ -1,7 +1,8 @@
 #!/bin/bash
 
-QUARKS_OP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-MANIFEST_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+QUARKS_OP_DIR=$ROOT/quarks/operations
+MANIFEST_DIR=$ROOT/manifests
 MANIFEST=${MANIFEST:-$(ls $MANIFEST_DIR/*.yml)}
 
 bosh int $MANIFEST \

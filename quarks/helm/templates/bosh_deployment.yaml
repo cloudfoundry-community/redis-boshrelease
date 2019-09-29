@@ -1,0 +1,25 @@
+{{- $root := . -}}
+---
+apiVersion: fissile.cloudfoundry.org/v1alpha1
+kind: BOSHDeployment
+metadata:
+  name: {{ .Values.deployment_name }}
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ include "quarks.fullname" . }}
+    app.kubernetes.io/version: {{ default .Chart.Version .Chart.AppVersion | quote }}
+    helm.sh/chart: {{ include "quarks.chart" . }}
+spec:
+  manifest:
+    name: {{ .Values.deployment_name }}-deployment
+    type: configmap
+  ops:
+{{- range $path, $bytes := .Files.Glob "assets/operations/*" }}
+  - name: {{ include "quarks.ops-name" $path }}
+    type: configmap
+{{- end }}
+{{- range $_, $ops := .Values.operations.custom }}
+  - name: {{ $ops | quote }}
+    type: configmap
+{{- end }}

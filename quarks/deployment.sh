@@ -13,7 +13,7 @@ data:
   manifest: |
     ---
 EOT
-sed 's/^/    /' < <(./manifests/operators/quarks/merge.sh "$@")
+sed 's/^/    /' < <(./quarks/merge.sh "$@")
 cat <<EOT
 ---
 apiVersion: v1

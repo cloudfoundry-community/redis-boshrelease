@@ -1,0 +1,13 @@
+deployment_name: redis
+
+releases:
+  # The defaults for all releases, where we do not otherwise override them.
+  defaults:
+    url: docker.io/cfcommunity
+    stemcell:
+      os: opensuse-42.3
+      version: 38.g82067a9-30.95-7.0.0_354.gacefcfa4
+
+operations:
+  # A list of configmap names that should be applied to the BOSH manifest.
+  custom: []
