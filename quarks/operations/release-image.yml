@@ -2,9 +2,9 @@
   path: /releases/name=redis/sha1
 - type: replace
   path: /releases/name=redis/url
-  value: docker.io/cfcommunity
+  value: {{ .Values.releases.defaults.url | quote }}
 - type: replace
   path: /releases/name=redis/stemcell
   value:
-    os: opensuse-42.3
-    version: 38.g82067a9-30.95-7.0.0_354.gacefcfa4
+    os: {{ .Values.releases.defaults.stemcell.os | quote }}
+    version: {{ .Values.releases.defaults.stemcell.version | quote }}
