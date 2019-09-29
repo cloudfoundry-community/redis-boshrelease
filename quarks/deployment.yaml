@@ -10,7 +10,7 @@ spec:
     fissile.cloudfoundry.org/deployment-name: redis-deployment
   ports:
     - protocol: TCP
-      port: 80
+      port: 6379
       targetPort: 6379
 ---
 apiVersion: v1
