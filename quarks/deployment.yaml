@@ -90,6 +90,10 @@ data:
     - type: remove
       path: /addons
     - type: remove
+      path: /update
+    - type: remove
+      path: /stemcells
+    - type: remove
       path: /releases/name=bpm
     - type: remove
       path: /instance_groups/name=redis/stemcell
