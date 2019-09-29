@@ -6,4 +6,4 @@ MANIFEST=${MANIFEST:-$(ls $MANIFEST_DIR/*.yml)}
 
 bosh int $MANIFEST \
   $(ls $QUARKS_OP_DIR/*.yml | xargs -L1 echo "-o") \
-  ${@:+$(echo "$@" | xargs -n 1 echo "-o" | xargs)}
+  $(echo "$@" | xargs -n 1 echo "-o" | xargs)
