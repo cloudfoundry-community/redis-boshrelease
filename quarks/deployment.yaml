@@ -84,25 +84,21 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: redis-ops-tags
-data:
-  ops: |
-    - type: replace
-      path: /tags?
-      value:
-        maintainer: "Dr Nic Williams, Stark & Wayne"
-        maintainer_email: "drnicwilliams@gmail.com"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redis-ops-no-bpm
+  name: redis-ops-quarks-cleanup
 data:
   ops: |
     - type: remove
       path: /addons
     - type: remove
       path: /releases/name=bpm
+    - type: remove
+      path: /instance_groups/name=redis/stemcell
+    - type: remove
+      path: /instance_groups/name=redis/vm_type
+    - type: remove
+      path: /instance_groups/name=redis/networks
+    - type: remove
+      path: /instance_groups/name=redis/azs
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -148,27 +144,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: redis-ops-persistence
+  name: redis-ops-persistence-gke
 data:
   ops: |
     - type: replace
       path: /instance_groups/name=redis/persistent_disk_type?
       value: standard
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redis-ops-cleanup-ig
-data:
-  ops: |
-    - type: remove
-      path: /instance_groups/name=redis/stemcell
-    - type: remove
-      path: /instance_groups/name=redis/vm_type
-    - type: remove
-      path: /instance_groups/name=redis/networks
-    - type: remove
-      path: /instance_groups/name=redis/azs
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -189,9 +170,7 @@ spec:
     name: redis-manifest
     type: configmap
   ops:
-  - name: redis-ops-tags
-    type: configmap
-  - name: redis-ops-no-bpm
+  - name: redis-ops-quarks-cleanup
     type: configmap
   - name: redis-ops-no-errands
     type: configmap
@@ -199,9 +178,7 @@ spec:
     type: configmap
   - name: redis-ops-release-image
     type: configmap
-  - name: redis-ops-persistence
-    type: configmap
-  - name: redis-ops-cleanup-ig
+  - name: redis-ops-persistence-gke
     type: configmap
   - name: redis-ops-single-instance
     type: configmap
