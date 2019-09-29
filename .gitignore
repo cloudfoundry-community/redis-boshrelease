@@ -18,3 +18,4 @@ Gemfile.lock
 local*yml
 tmp
 creds.yml
+.log.txt
