@@ -1,0 +1,12 @@
+Thank you for installing {{ .Chart.Name }}, a Helm chart that runs https://github.com/cloudfoundry-community/redis-boshrelease using Cloud Foundry Quarks, via the cf-operator.
+
+Your release is named {{ .Release.Name }}.
+
+To access your Redis cluster:
+
+    redis_password="$(k get secret -n {{ .Release.Namespace }} {{ include "quarks.fullname" . }}.var-redis-password --template '{{ "{{" }}.data.password}}' | base64 --decode)"
+    redis-cli -h {{ include "quarks.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -a "${redis_password}"
+
+Try the "kwt" CLI in another terminal to make your Redis service accessible from your local machine:
+
+    sudo -E kwt net start --namespace {{ .Release.Namespace }}
