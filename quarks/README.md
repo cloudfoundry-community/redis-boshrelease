@@ -53,8 +53,16 @@ kubectl apply -n scf \
 
 ## Helm chart
 
+The `quarks/helm/` folder contains a Helm chart. It includes symlinks to assets in other folders, including the BOSH manifest `manifests/redis.yml`.
+
 ```plain
 helm upgrade --install --wait --namespace scf \
     redis-deployment \
     quarks/helm
+```
+
+To destroy cluster and uninstall chart:
+
+```plain
+helm delete redis-deployment --purge
 ```
