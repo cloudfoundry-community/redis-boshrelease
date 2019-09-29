@@ -3,3 +3,8 @@ appVersion: "15.3.3" # from https://github.com/cloudfoundry-community/redis-bosh
 description: Redis cluster, from https://github.com/cloudfoundry-community/redis-boshrelease
 name: redis
 version: 0.1.0
+icon: https://github.com/cloudfoundry-community/worlds-simplest-service-broker/raw/master/helm/worlds-simplest-service-broker/starkandwayne-logo-blue.png
+maintainers:
+- name: Dr Nic Williams
+  email: drnicwilliams@gmail.com
+  url: https://github.com/drnic
