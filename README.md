@@ -1,20 +1,29 @@
 # BOSH release for Redis
 
-One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is to deploy this bosh release.
+One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is to deploy this bosh release. It can also be deployed to Kubernetes using Quarks/`cf-operator` and a Helm chart.
 
 * [Concourse CI](https://ci-ohio.starkandwayne.com/teams/cfcommunity/pipelines/redis-boshrelease)
 * Pull requests will be automatically tested against a bosh-lite (see `testflight-pr` job)
 * Discussions and CI notifications at [#redis-boshrelease channel](https://cloudfoundry.slack.com/messages/C6Q802GTC/) on https://slack.cloudfoundry.org
 
-Deploy Redis cluster with pre-compiled releases:
+Deploy Redis cluster with pre-compiled releases to a BOSH director:
 
 ```plain
 bosh -d redis deploy \
     <(curl -L https://raw.githubusercontent.com/cloudfoundry-community/redis-boshrelease/master/manifests/redis.yml)
 ```
 
-Usage
------
+Deploy Redis cluster with pre-compiled Docker images to Kubernetes that is running Quarks (`cf-operator`) in the same namespace:
+
+```plain
+helm repo add starkandwayne https://helm.starkandwayne.com
+helm repo update
+helm upgrade --install --wait --namespace scf \
+    redis-deployment \
+    starkandwayne/redis
+```
+
+## BOSH usage
 
 This repository includes base manifests and operator files. They can be used for initial deployments and subsequently used for updating your deployments.
 
@@ -52,7 +61,7 @@ Redis Sentinel provides high availability for Redis. In this bosh release, you c
 [...]
   instances: 3
   jobs:
-[...] 
+[...]
   - name: redis
     release: redis
   - name: redis-sentinel
