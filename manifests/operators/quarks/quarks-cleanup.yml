@@ -1,0 +1,16 @@
+- type: remove
+  path: /addons
+- type: remove
+  path: /update
+- type: remove
+  path: /stemcells
+- type: remove
+  path: /releases/name=bpm
+- type: remove
+  path: /instance_groups/name=redis/stemcell
+- type: remove
+  path: /instance_groups/name=redis/vm_type
+- type: remove
+  path: /instance_groups/name=redis/networks
+- type: remove
+  path: /instance_groups/name=redis/azs

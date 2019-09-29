@@ -1,0 +1,7 @@
+- type: replace
+  path: /instance_groups/name=redis/jobs/name=redis/properties/quarks?
+  value:
+    ports:
+    - name: "redis"
+      protocol: "TCP"
+      internal: 6379
