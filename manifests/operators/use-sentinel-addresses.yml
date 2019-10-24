@@ -7,5 +7,5 @@
 - path: /instance_groups/name=redis/jobs/name=redis/properties?
   type: replace
   value:
-    password: ((redis_password))
+    password: ((redis-password))
     bind_static_ip: true
