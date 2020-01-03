@@ -23,14 +23,14 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    fissile.cloudfoundry.org/instance-group-name: redis
-    fissile.cloudfoundry.org/deployment-name: redis-deployment
+    quarks.cloudfoundry.org/instance-group-name: redis
+    quarks.cloudfoundry.org/deployment-name: redis-deployment
   ports:
     - protocol: TCP
       port: 6379
       targetPort: 6379
 ---
-apiVersion: fissile.cloudfoundry.org/v1alpha1
+apiVersion: quarks.cloudfoundry.org/v1alpha1
 kind: BOSHDeployment
 metadata:
   name: redis-deployment
