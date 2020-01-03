@@ -64,5 +64,5 @@ helm upgrade --install --wait --namespace kubecf \
 To destroy cluster and uninstall chart:
 
 ```plain
-helm delete redis-deployment --purge
+helm delete redis-deployment -n kubecf
 ```
