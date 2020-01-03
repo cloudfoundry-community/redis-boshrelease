@@ -16,11 +16,9 @@ bosh -d redis deploy \
 Deploy Redis cluster with pre-compiled Docker images to Kubernetes that is running Quarks (`cf-operator`) in the same namespace:
 
 ```plain
-helm repo add starkandwayne https://helm.starkandwayne.com
-helm repo update
 helm upgrade --install --wait --namespace kubecf \
     redis-deployment \
-    starkandwayne/redis
+    ./quarks/helm/redis
 ```
 
 ## BOSH usage
