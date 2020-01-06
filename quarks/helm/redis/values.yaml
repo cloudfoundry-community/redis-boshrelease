@@ -11,6 +11,19 @@ releases:
 cluster:
   instances: 1
 
+features:
+  ingress:
+    enabled: false
+
+# Service is only valid to set a external endpoints for the instance groups if
+# features.ingress.enabled is true.
+services:
+  redis:
+    type: LoadBalancer
+    externalIPs: []
+    clusterIP: ~
+    loadBalancerIP: ~
+
 operations:
   # A list of configmap names that should be applied to the BOSH manifest.
   custom: []

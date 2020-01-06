@@ -66,3 +66,47 @@ To destroy cluster and uninstall chart:
 ```plain
 helm delete redis-deployment -n kubecf
 ```
+
+### Ingress Service
+
+You can enhance your deployment with a public LoadBalancer service.
+
+```plain
+helm upgrade --install --wait --namespace kubecf \
+    redis-deployment \
+    quarks/helm/redis \
+    --set 'features.ingress.enabled=true'
+```
+
+Your cloud should generate a public IP for you, which will be visible to you in the `kubectl get svc` output:
+
+```plain
+$ kubectl get svc -l app.kubernetes.io/instance=redis-deployment
+NAME                      TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)          AGE
+redis-deployment          ClusterIP      10.0.0.159    <none>          6379/TCP         19m
+redis-deployment-public   LoadBalancer   10.0.14.205   34.82.172.107   6379:31669/TCP   4m50s
+```
+
+If you have a pre-allocated IP, you can request that this be used for your `LoadBalancer`.
+
+For Google GKE:
+
+```plain
+$ gcloud compute addresses create redis-router --region us-west1
+$ gcloud compute addresses list
+NAME          ADDRESS/RANGE  TYPE      PURPOSE  NETWORK  REGION    SUBNET  STATUS
+redis-router  34.82.240.78   EXTERNAL                    us-west1          RESERVED
+$ helm upgrade --install --wait --namespace kubecf \
+    redis-deployment \
+    quarks/helm/redis \
+    --set 'features.ingress.enabled=true,services.redis.loadBalancerIP=34.82.240.78'
+```
+
+Wait a minute for Google to replace the `EXTERNAL-IP`:
+
+```plain
+$ kubectl get svc -l app.kubernetes.io/instance=redis-deployment
+NAME                      TYPE           CLUSTER-IP   EXTERNAL-IP    PORT(S)          AGE
+redis-deployment          ClusterIP      10.0.0.159   <none>         6379/TCP         23m
+redis-deployment-public   LoadBalancer   10.0.3.212   34.82.240.78   6379:31822/TCP   53s
+```
