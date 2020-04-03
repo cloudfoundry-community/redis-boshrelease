@@ -1,13 +1,23 @@
 ---
 meta:
   name:    redis
-  # fly -t ohio-cf login -c https://ci2.starkandwayne.com -n cfcommunity
-  target:  ohio-cf
-  url:     https://ci2.starkandwayne.com
+  # fly -t lab-cf login -c https://pipes.starkandwayne.com -n cfcommunity
+  target:  lab-cf
+  url:     https://pipes.starkandwayne.com
 
   test-errand: sanity-tests
 
   initial_version: 13.1.0
+
+  bosh:
+    stemcell:
+      major: 456
+      cpi: aws-xen-hvm
+      os: ubuntu-xenial
+    target:   https://10.128.4.73:25555
+    cacert:   ((thunder-dome.ca-certificate))
+    username: ((thunder-dome.username))
+    password: ((thunder-dome.password))
 
   git:
     email:  ((git-commit-email))
@@ -15,8 +25,8 @@ meta:
 
   aws:
     bucket: redis-boshrelease
-    access_key: ((aws-cfcommunity-access))
-    secret_key: ((aws-cfcommunity-secret))
+    access_key: ((aws-cfcommunity.access))
+    secret_key: ((aws-cfcommunity.secret))
 
   github:
     owner:  cloudfoundry-community
@@ -26,7 +36,7 @@ meta:
     access_token: ((github-access-token))
 
   slack:
-    webhook:  ((slack-webhook))
+    webhook:  TODO-slack-webhook
     icon:     ((slack-logo))
     username: ((slack-username))
     channel: '#redis-boshrelease'

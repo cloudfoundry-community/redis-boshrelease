@@ -2,7 +2,7 @@
 
 One of the fastest ways to get [redis](http://redis.io) running on any infrastructure is to deploy this bosh release. It can also be deployed to Kubernetes using Quarks/`cf-operator` and a Helm chart.
 
-* [Concourse CI](https://ci-ohio.starkandwayne.com/teams/cfcommunity/pipelines/redis-boshrelease)
+* [Concourse CI](https://pipes.starkandwayne.com/teams/cfcommunity/pipelines/redis-boshrelease)
 * Pull requests will be automatically tested against a bosh-lite (see `testflight-pr` job)
 * Discussions and CI notifications at [#redis-boshrelease channel](https://cloudfoundry.slack.com/messages/C6Q802GTC/) on https://slack.cloudfoundry.org
 
