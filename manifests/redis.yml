@@ -44,7 +44,7 @@ update:
 stemcells:
 - alias: default
   os: ubuntu-xenial
-  version: 456.latest
+  version: 621.latest
 
 releases:
 - name: bpm
