@@ -1,6 +1,8 @@
 builds:
   23a5fb38-217f-4ae6-6f9a-5a8b7439d11f:
     version: 15.2.3
+  28f7fa0d-5e69-4020-692e-0637265f9977:
+    version: 15.3.4
   2cd9161e-a036-4f37-7f1c-9b306621270e:
     version: 14.0.0
   50de89b1-f32b-457a-672f-e4e1dfe2209d:
