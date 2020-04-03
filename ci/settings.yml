@@ -10,10 +10,6 @@ meta:
   initial_version: 13.1.0
 
   bosh:
-    stemcell:
-      major: 621
-      cpi: aws-xen-hvm
-      os: ubuntu-xenial
     target:   https://10.128.4.73:25555
     cacert:   ((thunder-dome.ca-certificate))
     username: ((thunder-dome.username))
